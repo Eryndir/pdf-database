@@ -5,8 +5,8 @@ case class pdfObject(
     driveLink: String = "N/A",
     genre: String = "N/A",
     tags: List[String] = List(),
-    pageNumber: Int = -1,
-    rating: Double = -1,
+    pageNumbers: Int = 0,
+    rating: String = "N/A",
     read: Boolean = false,
     favourite: Boolean = false,
     extraMaterial: String = "N/A",
@@ -34,7 +34,7 @@ case class pdfObject(
     s"$name - $categoryName" +
       s"\n| Source: $source, drivelink: $driveLink\n" +
       s"| Genre: $genre, Tags: $tagsToString\n" +
-      s"| Pages: $pageNumber, Rating: $rating\n" +
+      s"| Pages: $pageNumbers, Rating: $rating\n" +
       s"| Read: $read, Favourite: $favourite\n" +
       s"| Extra material: $extraMaterial" +
       s"$categorySpecifics";
