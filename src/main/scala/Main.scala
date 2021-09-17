@@ -1,5 +1,21 @@
-@main def hello: Unit =
-  println("Hello world!")
-  println(msg)
+import scala.util.control.Breaks._
 
-def msg = "I was compiled by Scala 3. :)"
+@main def hello: Unit =
+  /*
+  breakable {
+    while true do
+      val input = consoleReader()
+      if input.equals("exit") then
+        println("break?")
+        break
+  }
+
+
+  println("Hello world!")
+  println(p.toString)*/
+  pdfCreation
+
+def consoleReader: String =
+  io.StdIn.readLine().toString()
+
+def pdfCreation: Unit = ()
