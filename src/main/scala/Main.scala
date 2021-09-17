@@ -1,4 +1,9 @@
 import scala.util.control.Breaks._
+import scala.util.Properties
+import scala.io.Source
+import java.{util => ju}
+import javax.xml.transform.Source
+import java.io.File
 
 @main def hello: Unit =
   /*
@@ -11,8 +16,8 @@ import scala.util.control.Breaks._
   }
 
 
-  println("Hello world!")
-  println(p.toString)*/
+  println("Hello world!")*/
+  println(ConfigurationReader.getProperty("googleOath"))
   pdfCreation
 
 def consoleReader: String =
