@@ -18,4 +18,7 @@ import scala.util.control.Breaks._
 def consoleReader: String =
   io.StdIn.readLine().toString()
 
-def pdfCreation: Unit = ()
+def pdfCreation: Unit =
+  val list = List("a", "b")
+  val p = new pdfObject(category = Category.CollsCampaigns, categoryInfo = list)
+  println(p)
