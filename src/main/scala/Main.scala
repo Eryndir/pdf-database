@@ -17,7 +17,8 @@ import java.io.File
 
 
   println("Hello world!")*/
-  println(ConfigurationReader.getProperty("googleOath"))
+  val configReader = new ConfigReader
+  println(configReader.getProperty("googleOath"))
   pdfCreation
 
 def consoleReader: String =

@@ -1,4 +1,3 @@
-import scala.compiletime.ops.boolean
 case class pdfObject(
     name: String = "N/A",
     source: String = "N/A",
