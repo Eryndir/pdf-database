@@ -12,7 +12,6 @@ case class pdfObject(
     category: Category,
     categoryInfo: List[String] = List()
 ):
-  def tagsToString: String = tags.mkString(", ")
 
   def categorySpecifics: String =
     if (category.header == List()) {
@@ -32,7 +31,7 @@ case class pdfObject(
   override def toString =
     s"$name - $categoryName" +
       s"\n| Source: $source, drivelink: $driveLink\n" +
-      s"| Genre: $genre, Tags: $tagsToString\n" +
+      s"| Genre: $genre, Tags: ${tags.mkString(", ")}\n" +
       s"| Pages: $pageNumbers, Rating: $rating\n" +
       s"| Read: $read, Favourite: $favourite\n" +
       s"| Extra material: $extraMaterial" +
