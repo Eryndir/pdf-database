@@ -17,6 +17,8 @@ libraryDependencies += "com.google.api-client" % "google-api-client" % "1.23.0"
 libraryDependencies += "com.google.oauth-client" % "google-oauth-client-jetty" % "1.23.0"
 libraryDependencies += "com.google.apis" % "google-api-services-drive" % "v3-rev110-1.23.0"
 
+libraryDependencies += "org.xerial" % "sqlite-jdbc" % "3.34.0"
+
 // Determine OS version of JavaFX binaries
 lazy val osName = System.getProperty("os.name") match {
   case n if n.startsWith("Linux")   => "linux"
@@ -28,6 +30,7 @@ lazy val osName = System.getProperty("os.name") match {
 // Add dependency on JavaFX libraries, OS dependent
 lazy val javaFXModules =
   Seq("base", "controls", "fxml", "graphics", "media", "swing", "web")
+
 libraryDependencies ++= javaFXModules.map(m =>
   "org.openjfx" % s"javafx-$m" % "16" classifier osName
 )

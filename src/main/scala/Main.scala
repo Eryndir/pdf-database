@@ -5,7 +5,7 @@ import java.{util => ju}
 import javax.xml.transform.Source
 import java.io.File
 
-@main def main: Unit =
+@main def mainDriveTest: Unit =
   /*
   breakable {
     while true do
@@ -17,11 +17,19 @@ import java.io.File
 
 
   println("Hello world!")*/
+
   val driveHandler = new DriveHandler
   driveHandler
     .searchFile("Läsår")
     .foreach(i => println(s"${i}"))
   pdfCreation(driveHandler)
+
+@main def mainDBTest: Unit =
+  val test = new DBHandler
+  val res = test.displayUsers
+
+  while res.next do
+    println(res.getString("fName") + " " + res.getString("lName"))
 
 def consoleReader: String =
   io.StdIn.readLine().toString()
