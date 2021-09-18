@@ -27,7 +27,15 @@ class Information:
   private val TOKENS_DIRECTORY_PATH = "tokens"
   private val SCOPES =
     Collections.singletonList(DriveScopes.DRIVE_METADATA_READONLY)
-  val CREDENTIALS_FILE_PATH = "/credentials.json";
+  val CREDENTIALS_FILE_PATH = "/credentials.json"
+  val HTTP_TRANSPORT = GoogleNetHttpTransport.newTrustedTransport()
+  val service = new Drive.Builder(
+    HTTP_TRANSPORT,
+    JSON_FACTORY,
+    getCredentials(HTTP_TRANSPORT)
+  )
+    .setApplicationName(APPLICATION_NAME)
+    .build()
 
   def getCredentials(HTTP_TRANSPORT: NetHttpTransport): Credential = {
     val in = this.getClass.getResourceAsStream(CREDENTIALS_FILE_PATH)
@@ -50,32 +58,54 @@ class Information:
   }
 
   def quickstartScala: Unit = {
-    val HTTP_TRANSPORT = GoogleNetHttpTransport.newTrustedTransport()
 
-    val service = new Drive.Builder(
-      HTTP_TRANSPORT,
-      JSON_FACTORY,
-      getCredentials(HTTP_TRANSPORT)
-    )
-      .setApplicationName(APPLICATION_NAME)
-      .build()
+    val searchQuery = "Läsår"
+    val boolFile = false
 
     val result = service
       .files()
       .list()
-      .setPageSize(100)
+      .setQ(s"name contains '$searchQuery'")
       .setFields("nextPageToken, files(id, name)")
       .execute()
 
     val files = result.getFiles()
     val size = files.size
+    val urlFilePrefix = "https://drive.google.com/file/d/"
+    val urlFolderPrefix = "https://drive.google.com/drive/folders/"
 
     if files == null || files.isEmpty() then println("No files found.")
     else
       println("Files:")
-      files.forEach(file => println(file.getName() + "(" + file.getId + ")"))
+
+      files.forEach(file =>
+        if boolFile then
+          println(s"${file.getName()}\n ${urlFilePrefix + file.getId}}\n")
+        else println(s"${file.getName()}\n ${urlFolderPrefix + file.getId}}\n")
+      )
   }
+
+  def searchFile(searchTerm: String): Unit =
+    val result = service
+      .files()
+      .list()
+      .setQ(s"name contains '$searchTerm'")
+      .setFields("nextPageToken, files(id, name)")
+      .execute()
+
+    val files = result.getFiles()
+    val size = files.size
+    val urlFilePrefix = "https://drive.google.com/file/d/"
+    val urlFolderPrefix = "https://drive.google.com/drive/folders/"
+
+    if files == null || files.isEmpty() then println("No files found.")
+    else
+      println("Files:")
+
+      files.forEach(file =>
+        println(s"${file.getName()}\n ${urlFilePrefix + file.getId}}\n")
+      )
 
 @main def quickstsrtMain: Unit =
   val info = new Information
-  info.quickstartScala
+  info.searchFile("Witcher")
