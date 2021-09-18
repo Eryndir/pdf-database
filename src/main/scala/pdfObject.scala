@@ -29,8 +29,9 @@ case class pdfObject(
   def categoryName: String = category.title
 
   override def toString =
-    s"$name - $categoryName" +
-      s"\n| Source: $source, drivelink: $driveLink\n" +
+    s"$name - $categoryName\n" +
+      s"| Source: $source\n" +
+      s"| drivelink: $driveLink\n" +
       s"| Genre: $genre, Tags: ${tags.mkString(", ")}\n" +
       s"| Pages: $pageNumbers, Rating: $rating\n" +
       s"| Read: $read, Favourite: $favourite\n" +
