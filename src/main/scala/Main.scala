@@ -18,6 +18,9 @@ import java.io.File
 
   println("Hello world!")*/
   val driveHandler = new DriveHandler
+  driveHandler
+    .searchFile("Läsår")
+    .foreach(i => println(s"${i}"))
   pdfCreation(driveHandler)
 
 def consoleReader: String =
@@ -25,10 +28,10 @@ def consoleReader: String =
 
 def pdfCreation(driveHandler: DriveHandler): Unit =
   val list = List("a", "b")
-
+  val pdfName = "Arcadia #006"
   val p = new pdfObject(
-    name = "Arcadia #004",
-    driveLink = driveHandler.getFileLink("Arcadia #004"),
+    name = pdfName,
+    driveLink = driveHandler.getFileLink(pdfName),
     category = Category.CollsCampaigns,
     categoryInfo = list
   )
