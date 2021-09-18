@@ -15,8 +15,11 @@ project/plugins/project/
 .cache
 .lib/
 
-*.properties
 
+### Sensitive stuff ###
+*.properties
+credentials.json
+tokens
 
 ### VSCode ###
 .metals

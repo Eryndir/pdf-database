@@ -5,7 +5,7 @@ import java.{util => ju}
 import javax.xml.transform.Source
 import java.io.File
 
-@main def hello: Unit =
+@main def main: Unit =
   /*
   breakable {
     while true do

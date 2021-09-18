@@ -10,7 +10,12 @@ lazy val root = project
   )
 
 // Add dependency on ScalaFX library
-libraryDependencies += "org.scalafx" %% "scalafx" % "16.0.0-R24"
+libraryDependencies += "org.scalafx" %% "scalafx" % "16.0.0-R25"
+
+//google api dependencies
+libraryDependencies += "com.google.api-client" % "google-api-client" % "1.23.0"
+libraryDependencies += "com.google.oauth-client" % "google-oauth-client-jetty" % "1.23.0"
+libraryDependencies += "com.google.apis" % "google-api-services-drive" % "v3-rev110-1.23.0"
 
 // Determine OS version of JavaFX binaries
 lazy val osName = System.getProperty("os.name") match {
