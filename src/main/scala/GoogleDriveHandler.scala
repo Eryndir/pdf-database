@@ -19,7 +19,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.security.GeneralSecurityException;
 import java.util.Collections;
-import java.util.List;
+import scala.collection.JavaConverters._
 
 class DriveHandler:
   private val APPLICATION_NAME = "pdf-database"
@@ -90,10 +90,10 @@ class DriveHandler:
       .files()
       .list()
       .setQ(s"name contains '$searchTerm'")
-      .setFields("nextPageToken, files(id, name)")
+      .setFields("nextPageToken, files(id, name, webContentLink)")
       .execute()
 
-    result.getFiles()
+    result.getFiles().asScala.toList
 
   def getFileLink(searchTerm: String): String =
     val files = searchFile(searchTerm)
@@ -102,8 +102,9 @@ class DriveHandler:
 
     if files.size > 1 then return "Too Many Files"
     else if files.size == 1 then
-      var url = urlFilePrefix + files.get(0).getId
-      return url
+      val contentLink = files.head.getWebContentLink
+      if contentLink == null then return (urlFolderPrefix + files.head.getId)
+      else return contentLink
     else return "No files"
 
 @main def quickstsrtMain: Unit =
