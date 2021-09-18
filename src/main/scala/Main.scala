@@ -17,14 +17,19 @@ import java.io.File
 
 
   println("Hello world!")*/
-  val configReader = new ConfigReader
-  println(configReader.getProperty("googleOath"))
-  pdfCreation
+  val driveHandler = new DriveHandler
+  pdfCreation(driveHandler)
 
 def consoleReader: String =
   io.StdIn.readLine().toString()
 
-def pdfCreation: Unit =
+def pdfCreation(driveHandler: DriveHandler): Unit =
   val list = List("a", "b")
-  val p = new pdfObject(category = Category.CollsCampaigns, categoryInfo = list)
+
+  val p = new pdfObject(
+    name = "Arcadia #004",
+    driveLink = driveHandler.getFileLink("Arcadia #004"),
+    category = Category.CollsCampaigns,
+    categoryInfo = list
+  )
   println(p)

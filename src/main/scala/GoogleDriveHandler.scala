@@ -21,7 +21,7 @@ import java.security.GeneralSecurityException;
 import java.util.Collections;
 import java.util.List;
 
-class Information:
+class DriveHandler:
   private val APPLICATION_NAME = "pdf-database"
   private val JSON_FACTORY = JacksonFactory.getDefaultInstance()
   private val TOKENS_DIRECTORY_PATH = "tokens"
@@ -85,7 +85,7 @@ class Information:
       )
   }
 
-  def searchFile(searchTerm: String): Unit =
+  def searchFile(searchTerm: String): List[File] =
     val result = service
       .files()
       .list()
@@ -93,19 +93,19 @@ class Information:
       .setFields("nextPageToken, files(id, name)")
       .execute()
 
-    val files = result.getFiles()
-    val size = files.size
+    result.getFiles()
+
+  def getFileLink(searchTerm: String): String =
+    val files = searchFile(searchTerm)
     val urlFilePrefix = "https://drive.google.com/file/d/"
     val urlFolderPrefix = "https://drive.google.com/drive/folders/"
 
-    if files == null || files.isEmpty() then println("No files found.")
-    else
-      println("Files:")
-
-      files.forEach(file =>
-        println(s"${file.getName()}\n ${urlFilePrefix + file.getId}}\n")
-      )
+    if files.size > 1 then return "Too Many Files"
+    else if files.size == 1 then
+      var url = urlFilePrefix + files.get(0).getId
+      return url
+    else return "No files"
 
 @main def quickstsrtMain: Unit =
-  val info = new Information
+  val info = new DriveHandler
   info.searchFile("Witcher")
