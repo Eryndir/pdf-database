@@ -4,43 +4,31 @@ import scala.io.Source
 import java.{util => ju}
 import javax.xml.transform.Source
 import java.io.File
+import os.Path
 
-@main def mainDriveTest: Unit =
-  /*
-  breakable {
-    while true do
-      val input = consoleReader()
-      if input.equals("exit") then
-        println("break?")
-        break
-  }
-
-
-  println("Hello world!")*/
-
+@main def main: Unit =
+  val fileHandler = new FileHandler(true)
   val driveHandler = new DriveHandler
-  driveHandler
-    .searchFile("Läsår")
-    .foreach(i => println(s"${i}"))
-  pdfCreation(driveHandler)
+  val dbHandler = new DBHandler(fileHandler)
+  val entry = pdfCreation(driveHandler)
 
-@main def mainDBTest: Unit =
-  val test = new DBHandler
-  val res = test.displayUsers
+  dbHandler.emptyTable
+  dbHandler.addEntry(entry)
+  val res = dbHandler.displayEntries
 
-  while res.next do
-    println(res.getString("fName") + " " + res.getString("lName"))
+  while res.next do println(dbHandler.getRow(res).toString + "\n")
+
+  println("---")
+  dbHandler.openFile("DM Yourself")
 
 def consoleReader: String =
   io.StdIn.readLine().toString()
 
-def pdfCreation(driveHandler: DriveHandler): Unit =
-  val list = List("a", "b")
-  val pdfName = "Arcadia #006"
-  val p = new pdfObject(
+def pdfCreation(driveHandler: DriveHandler): pdfObject =
+  val pdfName = "DM Yourself"
+  val pdf = new pdfObject(
     name = pdfName,
-    driveLink = driveHandler.getFileLink(pdfName),
-    category = Category.CollsCampaigns,
-    categoryInfo = list
+    source = s"D:/Roleplaying games/_D&D/3rd Party/Adventures - Solo/$pdfName",
+    driveLink = driveHandler.getFileLink(pdfName)
   )
-  println(p)
+  pdf
