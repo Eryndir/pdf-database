@@ -9,8 +9,8 @@ case class pdfObject(
     read: Boolean = false,
     favourite: Boolean = false,
     extraMaterial: String = "N/A",
-    category: Category,
-    categoryInfo: List[String] = List()
+    category: Category = Category.Uncategorized,
+    categoryInfo: List[String] = List() // BUILDER PATTERN?
 ):
 
   def categorySpecifics: String =
@@ -28,17 +28,24 @@ case class pdfObject(
 
   def categoryName: String = category.title
 
+  def getWinPdf: String = source.replace("/", "\\") ++ ".pdf"
+
   override def toString =
     s"$name - $categoryName\n" +
-      s"| Source: $source\n" +
+      s"| Source: $getWinPdf\n" +
       s"| drivelink: $driveLink\n" +
       s"| Genre: $genre, Tags: ${tags.mkString(", ")}\n" +
       s"| Pages: $pageNumbers, Rating: $rating\n" +
       s"| Read: $read, Favourite: $favourite\n" +
       s"| Extra material: $extraMaterial" +
       s"$categorySpecifics";
+  def toStringSmall =
+    s"$name - $categoryName\n"
 
-enum Category(val title: String, val header: List[String]):
+enum Category(
+    val title: String,
+    val header: List[String]
+): // less hardcoded categories?
   case CollsCampaigns
       extends Category(
         "Adventure Collections and Campaigns",
@@ -51,7 +58,6 @@ enum Category(val title: String, val header: List[String]):
   case CharsRoleplay
       extends Category("Character Options and Roleplaying", List())
   case DMing extends Category("DMing", List())
-
   case EncountersQuest
       extends Category("Encounters and Quests", List("Amount", "levelrange"))
   case GearItemsSpells
@@ -61,7 +67,6 @@ enum Category(val title: String, val header: List[String]):
   case LocationsGuides
       extends Category("Locations, Guides, and Gazatteers", List())
   case ModuleSupplments extends Category("Module Supplements", List("Module"))
-
   case MonstersCreatures
       extends Category("Monsters and Creatures", List("Amount"))
   case NPCsGroups extends Category("NPCs and Groups", List("Amount"))
@@ -70,7 +75,7 @@ enum Category(val title: String, val header: List[String]):
       extends Category("Settings and setting specific material", List())
   case SheetsCards extends Category("Sheets and Cards", List())
   case Supplements extends Category("Supplements", List())
-
   case Tools extends Category("Tools", List())
   case TrapsPuzzles extends Category("Traps, Puzzles, etc", List("Amount"))
   case Worldbuilding extends Category("Worldbuilding", List())
+  case Uncategorized extends Category("Uncategorized", List())
