@@ -20,6 +20,7 @@ import java.io.InputStreamReader;
 import java.security.GeneralSecurityException;
 import java.util.Collections;
 import scala.collection.JavaConverters._
+import scala.io.StdIn.readLine
 
 class DriveHandler:
   private val APPLICATION_NAME = "pdf-database"
@@ -89,8 +90,10 @@ class DriveHandler:
     val result = service
       .files()
       .list()
-      .setQ(s"name contains '$searchTerm'")
-      .setFields("nextPageToken, files(id, name, webContentLink)")
+      .setQ(
+        s"name contains '$searchTerm' and not '1Kbu1VM-wNeyLeN4Yfu4sfsFUptuxZxp4' in parents"
+      )
+      .setFields("nextPageToken, files(id, name, webContentLink, spaces)")
       .execute()
 
     result.getFiles().asScala.toList
@@ -100,8 +103,17 @@ class DriveHandler:
     val urlFilePrefix = "https://drive.google.com/file/d/"
     val urlFolderPrefix = "https://drive.google.com/drive/folders/"
 
-    if files.size > 1 then return "Too Many Files"
+    if files.size > 1 then
+      files.foreach(e =>
+        println(
+          s"${files.indexOf(e)}: ${e.getName} - ${e.getWebContentLink}\n\t${e.get}"
+        )
+      )
+      println("Choose file")
+      val choice = readLine().toInt
+      return files(choice).getWebContentLink
     else if files.size == 1 then
+      println("!!!!")
       val contentLink = files.head.getWebContentLink
       if contentLink == null then return (urlFolderPrefix + files.head.getId)
       else return contentLink
