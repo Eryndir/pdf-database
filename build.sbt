@@ -19,6 +19,8 @@ libraryDependencies += "com.google.apis" % "google-api-services-drive" % "v3-rev
 
 libraryDependencies += "org.xerial" % "sqlite-jdbc" % "3.34.0"
 
+libraryDependencies += "com.lihaoyi" %% "os-lib" % "0.7.8"
+
 // Determine OS version of JavaFX binaries
 lazy val osName = System.getProperty("os.name") match {
   case n if n.startsWith("Linux")   => "linux"
