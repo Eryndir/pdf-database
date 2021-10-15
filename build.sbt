@@ -9,9 +9,6 @@ lazy val root = project
     libraryDependencies += "com.novocode" % "junit-interface" % "0.11" % "test"
   )
 
-// Add dependency on ScalaFX library
-libraryDependencies += "org.scalafx" %% "scalafx" % "16.0.0-R25"
-
 //google api dependencies
 libraryDependencies += "com.google.api-client" % "google-api-client" % "1.23.0"
 libraryDependencies += "com.google.oauth-client" % "google-oauth-client-jetty" % "1.23.0"
@@ -20,6 +17,17 @@ libraryDependencies += "com.google.apis" % "google-api-services-drive" % "v3-rev
 libraryDependencies += "org.xerial" % "sqlite-jdbc" % "3.34.0"
 
 libraryDependencies += "com.lihaoyi" %% "os-lib" % "0.7.8"
+
+// Add dependency on ScalaFX library
+libraryDependencies += "org.scalafx" %% "scalafx" % "16.0.0-R25"
+
+scalacOptions ++= Seq(
+  "-unchecked",
+  "-deprecation",
+  "-encoding",
+  "utf8",
+  "-feature"
+)
 
 // Determine OS version of JavaFX binaries
 lazy val osName = System.getProperty("os.name") match {
@@ -32,7 +40,12 @@ lazy val osName = System.getProperty("os.name") match {
 // Add dependency on JavaFX libraries, OS dependent
 lazy val javaFXModules =
   Seq("base", "controls", "fxml", "graphics", "media", "swing", "web")
-
 libraryDependencies ++= javaFXModules.map(m =>
-  "org.openjfx" % s"javafx-$m" % "16" classifier osName
+  "org.openjfx" % s"javafx-$m" % "15" classifier osName
+)
+
+fork in run := true
+
+javaOptions ++= Seq(
+  "-Dprism.order=sw"
 )
