@@ -6,7 +6,8 @@ import javax.xml.transform.Source
 import java.io.File
 import os.Path
 
-@main def main: Unit =
+//@main
+def main: Unit =
   val fileHandler = new FileHandler(true)
   val driveHandler = new DriveHandler
   val dbHandler = new DBHandler(fileHandler)

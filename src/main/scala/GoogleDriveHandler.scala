@@ -119,6 +119,7 @@ class DriveHandler:
       else return contentLink
     else return "No files"
 
-@main def quickstsrtMain: Unit =
+//@main
+def quickstsrtMain: Unit =
   val info = new DriveHandler
   info.searchFile("Witcher")
