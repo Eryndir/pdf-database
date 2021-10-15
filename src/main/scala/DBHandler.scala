@@ -84,8 +84,12 @@ class DBHandler(fileHandler: FileHandler):
 
   def emptyTable: Unit =
     if con == null then getConnection
-    val statement = con.prepareStatement("delete from user")
-    statement.execute
+    println("Are you sure about emptying the table?")
+    val input = io.StdIn.readLine().toString().toLowerCase
+    if (input.equals("yes")) {
+      val statement = con.prepareStatement("delete from user")
+      statement.execute
+    }
 
   def openFile(name: String): Unit =
     val searchRes = searchEntry(name)
