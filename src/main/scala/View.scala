@@ -3,24 +3,46 @@ import scalafx.application.JFXApp3
 import scalafx.scene.Scene
 import scalafx.scene.shape.Rectangle
 import javafx.scene.paint.Color
+import scalafx.scene.control.{MenuBar, Menu, MenuItem}
+import scalafx.stage.DirectoryChooser
+import scalafx.event.ActionEvent
+import scalafx.scene.input.{KeyCodeCombination, KeyCode}
+import scalafx.scene.input.KeyCombination
 
-object HelloStageDemo extends JFXApp3 {
+object GUI extends JFXApp3 {
 
   override def start(): Unit = {
     stage = new JFXApp3.PrimaryStage {
-      title.value = "Hello Stage"
+      title = "Program"
       width = 600
+
       height = 450
       scene = new Scene {
-        fill = Color.LIGHTGREEN
-        content = new Rectangle {
-          x = 25
-          y = 40
-          width = 100
-          height = 100
-          fill <== when(hover) choose Color.RED otherwise Color.GREEN
+        fill = Color.LIGHTGRAY
+        val menuBar = new MenuBar
+        val fileMenu = new Menu("file")
+
+        val openDir = new MenuItem("Choose Directory")
+        openDir.accelerator =
+          new KeyCodeCombination(KeyCode.O, KeyCombination.ControlDown)
+        openDir.onAction = (e: ActionEvent) => {
+          val directoryChooser = new DirectoryChooser {
+            title = "Choose Main Directory"
+            initialDirectory = new java.io.File("/mnt/d/")
+          }
+          val selectedFolder = directoryChooser.showDialog(stage)
+          println(selectedFolder)
         }
+
+        val openToRead = new MenuItem("Choose ToRead Folder")
+
+        fileMenu.items = List(openDir, openToRead)
+        menuBar.menus = List(fileMenu)
+        menuBar.prefWidth = 600
+
+        content = List(menuBar)
       }
+
     }
   }
 }
