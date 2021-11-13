@@ -10,7 +10,8 @@ case class pdfObject(
     favourite: Boolean = false,
     extraMaterial: String = "N/A",
     category: Category = Category.Uncategorized,
-    categoryInfo: List[String] = List() // BUILDER PATTERN?
+    categoryInfo: List[String] = List(), // BUILDER PATTERN?
+    rpg: String = "System Neutral"
 ):
 
   def categorySpecifics: String =
@@ -32,6 +33,7 @@ case class pdfObject(
 
   override def toString =
     s"$name - $categoryName\n" +
+      s"| $rpg\n" +
       s"| Source: $getWinPdf\n" +
       s"| drivelink: $driveLink\n" +
       s"| Genre: $genre, Tags: ${tags.mkString(", ")}\n" +
