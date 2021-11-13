@@ -1,0 +1,9 @@
+.menuBar {
+  -fx-border-color: black;
+  -fx-orientation: vertical;
+  -fx-column-halignment: center;
+}
+
+.toggle-button {
+  -fx-padding: 10 0 10 0;
+}
