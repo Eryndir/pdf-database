@@ -8,6 +8,9 @@ import scalafx.geometry._
 import scalafx.css.Styleable
 import scalafx.scene.layout._
 import scalafx.scene.paint.Color
+import scala.compiletime.ops.boolean
+import scala.sys.process._
+import scala.language.postfixOps
 
 object GUI extends JFXApp3 {
   override def start(): Unit = {
@@ -22,7 +25,8 @@ object GUI extends JFXApp3 {
 
         val statusBar = new HBox {
           styleClass += "statusBar"
-          children += new Label("")
+          val dirLabel = new Label("Directory: None")
+          children += dirLabel
         }
 
         val menuBar = new VBox {
@@ -57,8 +61,18 @@ object GUI extends JFXApp3 {
                         title = "Choose Main Directory"
                         initialDirectory = new java.io.File("/mnt/d/")
                       }
-                      val selectedFolder = directoryChooser.showDialog(stage)
-                      println(selectedFolder)
+                      val selectedFolder =
+                        directoryChooser.showDialog(stage).toString
+
+                      val path = "wslpath -w \"/mnt/d/Roleplaying games\"".!!
+                      s"explorer.exe $path".!
+
+                      statusBar.getChildren.head match {
+                        case l: javafx.scene.control.Label =>
+                          l.setText(s"Directory: ${path}")
+                        case _ => println("ops")
+                      }
+
                     }
                   }
                 )
