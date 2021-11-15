@@ -4,6 +4,17 @@
   -fx-column-halignment: center;
 }
 
+.root {
+  -fx-background-color: lightgray;
+}
+
 .toggle-button {
+  -fx-background-color: rgb(175, 175, 175);
   -fx-padding: 10 0 10 0;
+  -fx-focus-color: transparent;
+  -fx-faint-focus-color: transparent;
+}
+
+.toggle-button:selected {
+  -fx-background-color: rgb(192, 75, 75);
 }
