@@ -23,4 +23,12 @@ class RadioCustom(textArg: String, selectedArg: Boolean, tg: ToggleGroup)
   minWidth = 100
   toggleGroup = tg
   selected = selectedArg
+
+  onAction = (e: ActionEvent) => {
+    textArg match {
+
+      case "View"   => PanelHandler.update(State.VIEW)
+      case "Create" => PanelHandler.update(State.CREATE)
+    }
+  }
 }

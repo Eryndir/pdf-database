@@ -61,9 +61,22 @@ object GUI extends JFXApp3 {
           )
         }
 
+        val main = new SplitPane {
+          items ++= List(
+            new StackPane {
+              children = Seq(PanelHandler.rightCreate, PanelHandler.rightView)
+            },
+            new StackPane {
+              children = Seq(PanelHandler.leftCreate, PanelHandler.leftView)
+            }
+          )
+
+        }
+
         root = new BorderPane {
           bottom = statusBar
           left = menuBar
+          center = main
         }
       }
     }

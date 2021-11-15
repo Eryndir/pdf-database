@@ -17,8 +17,13 @@
   -fx-padding: 10 0 10 0;
   -fx-focus-color: transparent;
   -fx-faint-focus-color: transparent;
+  -fx-background-radius: 0;
 }
 
 .toggle-button:selected {
   -fx-background-color: rgb(192, 75, 75);
+}
+
+.split-pane *.split-pane-divider {
+  -fx-padding: 0 0 0 0;
 }
