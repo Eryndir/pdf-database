@@ -7,6 +7,7 @@ import scalafx.event.ActionEvent
 import scalafx.geometry._
 import scalafx.css.Styleable
 import scalafx.scene.layout._
+import scalafx.scene.paint.Color
 
 object GUI extends JFXApp3 {
   override def start(): Unit = {
@@ -19,7 +20,10 @@ object GUI extends JFXApp3 {
       scene = new Scene {
         stylesheets = List(getClass.getResource("styles.css").toExternalForm)
 
-        val statusBar = new BorderPane {}
+        val statusBar = new HBox {
+          styleClass += "statusBar"
+          children += new Label("")
+        }
 
         val menuBar = new VBox {
           val tg = new ToggleGroup
@@ -65,6 +69,7 @@ object GUI extends JFXApp3 {
 
         root = new BorderPane {
           bottom = statusBar
+
           left = menuBar
         }
       }
