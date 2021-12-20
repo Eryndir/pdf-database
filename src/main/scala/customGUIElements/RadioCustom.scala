@@ -13,22 +13,19 @@ import scalafx.scene.paint.Color
 import scala.compiletime.ops.boolean
 import scala.sys.process._
 import scala.language.postfixOps
+import State._
 
-class RadioCustom(textArg: String, selectedArg: Boolean, tg: ToggleGroup)
-    extends RadioButton {
-  text = textArg
+class RadioCustom extends RadioButton {
   styleClass -= "radio-button"
   styleClass += "toggle-button"
   minHeight = 50
   minWidth = 100
-  toggleGroup = tg
-  selected = selectedArg
 
   onAction = (e: ActionEvent) => {
-    textArg match {
+    text.value match {
 
-      case "View"   => PanelHandler.update(State.VIEW)
-      case "Create" => PanelHandler.update(State.CREATE)
+      case "View"   => PanelHandler.update(VIEW)
+      case "Create" => PanelHandler.update(CREATE)
     }
   }
 }
