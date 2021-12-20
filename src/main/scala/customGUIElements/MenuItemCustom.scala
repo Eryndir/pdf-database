@@ -27,7 +27,7 @@ class MenuItemCustom(name: String, stage: PrimaryStage) extends MenuItem {
       initOwner(stage)
       title = "Confirmation Dialog"
       headerText =
-        s"About to change $name directory from $previousFolder to $selectedFolder"
+        s"About to change $name directory from \n$previousFolder \n\tto \n$selectedFolder"
       contentText = "Are you sure?"
     }
 
@@ -35,10 +35,8 @@ class MenuItemCustom(name: String, stage: PrimaryStage) extends MenuItem {
 
     result match {
       case Some(ButtonType.OK) => {
-        val path = s"wslpath -w \"$selectedFolder\"".!!
-        s"explorer.exe $path".!
-
-        LabelHandler.update(name, path)
+        val path = FilePathHandler.getWinPath(selectedFolder)
+        LabelHandler.update(name, path.toString)
       }
       case _ => println("Cancel or closed")
     }
