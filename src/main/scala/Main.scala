@@ -7,10 +7,9 @@ import java.io.File
 import os.Path
 
 //@main
-def main: Unit =
-  val fileHandler = new FileHandler(true)
+def testDiveHandler: Unit =
   val driveHandler = new DriveHandler
-  val dbHandler = new DBHandler(fileHandler)
+  val dbHandler = new DBHandler
   val entry = pdfCreation(driveHandler)
 
   dbHandler.emptyTable
