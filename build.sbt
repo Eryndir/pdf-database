@@ -20,7 +20,7 @@ libraryDependencies += "com.lihaoyi" %% "os-lib" % "0.7.8"
 
 // Add dependency on ScalaFX library
 libraryDependencies += "org.scalafx" %% "scalafx" % "16.0.0-R25"
-
+libraryDependencies += "org.controlsfx" % "controlsfx" % "11.1.1"
 scalacOptions ++= Seq(
   "-unchecked",
   "-deprecation",
