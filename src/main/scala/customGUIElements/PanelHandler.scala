@@ -2,39 +2,41 @@ package customGUIElements
 
 import scalafx.scene.layout.BorderPane
 import scalafx.scene.control.Label
+import State._
+import java.util.logging.FileHandler
 
 object PanelHandler {
 
-  val leftCreate = new BorderPane {
+  val leftCreate = new FilePane {
     style = " -fx-background-color: red;"
-    visible = false
-    center = new Label("leftCreate")
+    visible = true
+    top = new Label("leftCreate")
   }
   val rightCreate = new BorderPane {
     style = " -fx-background-color: orange;"
-    visible = false
-    center = new Label("rightCreate")
-  }
-  val leftView = new BorderPane {
-    style = " -fx-background-color: black;"
     visible = true
-    center = new Label("leftView")
+    top = new Label("rightCreate")
+  }
+  val leftView = new FilePane {
+    style = " -fx-background-color: black;"
+    visible = false
+    top = new Label("leftView")
   }
   val rightView = new BorderPane {
     style = " -fx-background-color: white;"
-    visible = true
-    center = new Label("rightView")
+    visible = false
+    top = new Label("rightView")
   }
 
   def update(state: State): Unit = {
     state match {
-      case State.CREATE => {
+      case CREATE => {
         leftCreate.visible = true
         rightCreate.visible = true
         leftView.visible = false
         rightView.visible = false
       }
-      case State.VIEW => {
+      case VIEW => {
         leftCreate.visible = false
         rightCreate.visible = false
         leftView.visible = true
