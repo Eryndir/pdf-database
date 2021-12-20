@@ -15,9 +15,8 @@ import customGUIElements._
 
 object GUI extends JFXApp3 {
   override def start(): Unit = {
-    val fileHandler = new FileHandler(true)
     val driveHandler = new DriveHandler
-    val dbHandler = new DBHandler(fileHandler)
+    val dbHandler = new DBHandler
 
     stage = new JFXApp3.PrimaryStage {
       title = "Program"
@@ -43,8 +42,16 @@ object GUI extends JFXApp3 {
           styleClass += "menuBar"
 
           children = Seq(
-            new RadioCustom("View", true, tg),
-            new RadioCustom("Create", false, tg),
+            new RadioCustom {
+              text = "View"
+              selected = true
+              toggleGroup = tg
+            },
+            new RadioCustom {
+              text = "Create"
+              selected = false
+              toggleGroup = tg
+            },
             new StackPane {
               alignment = Pos.BottomCenter
               vgrow = Priority.Always
@@ -64,13 +71,12 @@ object GUI extends JFXApp3 {
         val main = new SplitPane {
           items ++= List(
             new StackPane {
-              children = Seq(PanelHandler.rightCreate, PanelHandler.rightView)
+              children = Seq(PanelHandler.leftCreate, PanelHandler.leftView)
             },
             new StackPane {
-              children = Seq(PanelHandler.leftCreate, PanelHandler.leftView)
+              children = Seq(PanelHandler.rightCreate, PanelHandler.rightView)
             }
           )
-
         }
 
         root = new BorderPane {

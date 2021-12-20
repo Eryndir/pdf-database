@@ -4,7 +4,7 @@ import scala.compiletime.ops.boolean
 import scala.sys.process._
 import scala.language.postfixOps
 
-class DBHandler(fileHandler: FileHandler):
+class DBHandler:
   var hasData = false
   var con: Connection = null
 
