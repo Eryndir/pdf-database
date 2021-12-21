@@ -29,5 +29,5 @@ tokens
 ### Scala ###
 *.class
 *.log
-
+*.sc
 # End of https://www.gitignore.io/api/sbt,scala
