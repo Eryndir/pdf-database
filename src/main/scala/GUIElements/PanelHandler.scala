@@ -7,17 +7,13 @@ import java.util.logging.FileHandler
 
 object PanelHandler {
 
-  val leftCreate = new FilePane {
-    style = " -fx-background-color: red;"
-    visible = true
-    top = new Label("leftCreate")
-  }
+  val leftCreate = new FilePane
   val rightCreate = new BorderPane {
     style = " -fx-background-color: orange;"
     visible = true
     top = new Label("rightCreate")
   }
-  val leftView = new FilePane {
+  val leftView = new BorderPane {
     style = " -fx-background-color: black;"
     visible = false
     top = new Label("leftView")

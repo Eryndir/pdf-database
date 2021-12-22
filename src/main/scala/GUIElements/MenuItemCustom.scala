@@ -10,6 +10,7 @@ import scala.language.postfixOps
 import scalafx.application.JFXApp3.PrimaryStage
 import scalafx.scene.control.Alert.AlertType
 import scalafx.application.Platform
+import FilePathHandler._
 
 class MenuItemCustom(name: String, stage: PrimaryStage) extends MenuItem {
   text = name
@@ -35,7 +36,7 @@ class MenuItemCustom(name: String, stage: PrimaryStage) extends MenuItem {
 
     result match {
       case Some(ButtonType.OK) => {
-        val path = FilePathHandler.getWinPath(selectedFolder)
+        val path = getWinPath(selectedFolder)
         LabelHandler.update(name, path.toString)
       }
       case _ => println("Cancel or closed")
