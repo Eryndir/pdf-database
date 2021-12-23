@@ -6,13 +6,15 @@ import os.RelPath
 
 object FilePathHandler:
   def getFiles(path: Path): IndexedSeq[Path] =
-    os.walk(path, includeTarget = false)
+    os.list(path)
 
-  def getWinPath(path: String): Path =
-    Path(s"wslpath -w \"$path\"".!!.stripTrailing)
+  def getWinPath(path: String): String =
+    val lmao = s"wslpath -w \"$path\"".!!
+    lmao.stripTrailing
 
-  def getUnixPath(path: String): Path =
-    Path(s"wslpath -u \"$path\"".!!.stripTrailing)
+  def getUnixPath(path: String): String =
+    val lmao = s"wslpath -u \"$path\"".!!
+    lmao.stripTrailing
 
   def openFile(path: String): Unit =
     s"explorer.exe $path".!
@@ -21,4 +23,10 @@ object FilePathHandler:
     Path(string)
 
   def getMainPath(): Path =
-    getUnixPath(ConfigReader.getProperty("ToReadPath"))
+    convStrToPath(getUnixPath(ConfigReader.getProperty("MainPath")))
+
+  def getToReadPath(): Path =
+    convStrToPath(getUnixPath(ConfigReader.getProperty("ToReadPath")))
+
+  def getNeedSortingPath(): Path =
+    convStrToPath(getUnixPath(ConfigReader.getProperty("NotSortedPath")))
