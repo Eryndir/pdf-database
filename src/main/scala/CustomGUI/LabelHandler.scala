@@ -9,17 +9,31 @@ object LabelHandler {
   val toReadLabel = new Label(
     s"ToRead: ${ConfigReader.getProperty("ToReadPath")}"
   )
+  val needSortingLabel = new Label(
+    s"Need Sorting: ${ConfigReader.getProperty("NotSortedPath")}"
+  )
 
   def update(key: String, value: String): Unit = {
     Platform.runLater(
-      if key.equals("Main") then {
-        ConfigReader.setProperty("MainPath", value)
-        dirLabel.setText(s"Directory: ${ConfigReader.getProperty("MainPath")}")
-      } else {
-        ConfigReader.setProperty("ToReadPath", value)
-        toReadLabel.setText(
-          s"ToRead: ${ConfigReader.getProperty("ToReadPath")}"
-        )
+      key match {
+        case "Main" => {
+          ConfigReader.setProperty("MainPath", value)
+          dirLabel.setText(
+            s"Directory: ${ConfigReader.getProperty("MainPath")}"
+          )
+        }
+        case "ToRead" => {
+          ConfigReader.setProperty("ToReadPath", value)
+          toReadLabel.setText(
+            s"ToRead: ${ConfigReader.getProperty("ToReadPath")}"
+          )
+        }
+        case "Need Sorting" => {
+          ConfigReader.setProperty("NotSortedPath", value)
+          toReadLabel.setText(
+            s"ToRead: ${ConfigReader.getProperty("NotSortedPath")}"
+          )
+        }
       }
     )
   }
