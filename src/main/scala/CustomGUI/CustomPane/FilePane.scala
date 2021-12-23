@@ -21,7 +21,7 @@ import scalafx.scene.input.MouseEvent
 import scalafx.scene.layout.Pane
 
 class FilePane extends BorderPane {
-  prefWidth = 900
+  minWidth = (110 * 5) + 5
   val tgFiles = new ToggleGroup
   var allFolders: List[Pane] = List()
   val debugPath = getToReadPath()
@@ -70,7 +70,7 @@ class FilePane extends BorderPane {
         currentFolder = newFolder
         folderPaneStructure(fileStructure(z))
       else
-        currentFolder.children += new PdfPane {
+        currentFolder.children += new PdfPane(z) {
           text = x.last.dropRight(4)
           toggleGroup = tgFiles
         }
