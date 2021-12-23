@@ -52,19 +52,31 @@ object GUI extends JFXApp3 {
               selected = true
               toggleGroup = tg
             },
-            new StackPane {
+            new VBox {
               alignment = Pos.BottomCenter
               vgrow = Priority.Always
-              children = new MenuButton("settings") {
-                styleClass += "toggle-button"
-                minWidth = 100
+              children = Seq(
+                new Button {
+                  text = "Refresh"
+                  styleClass += "toggle-button"
+                  minHeight = 50
+                  minWidth = 100
+                  onAction = (e: ActionEvent) => {
+                    PanelHandler.leftCreate.refresh()
+                  }
 
-                items = Seq(
-                  new MenuItemCustom("Main", stage),
-                  new MenuItemCustom("ToRead", stage),
-                  new MenuItemCustom("Need Sorting", stage)
-                )
-              }
+                },
+                new MenuButton("settings") {
+                  styleClass += "toggle-button"
+                  minWidth = 100
+
+                  items = Seq(
+                    new MenuItemCustom("Main", stage),
+                    new MenuItemCustom("ToRead", stage),
+                    new MenuItemCustom("Need Sorting", stage)
+                  )
+                }
+              )
             }
           )
         }

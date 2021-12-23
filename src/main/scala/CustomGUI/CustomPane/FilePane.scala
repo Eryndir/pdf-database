@@ -26,26 +26,32 @@ class FilePane extends BorderPane {
   var allFolders: List[Pane] = List()
   val debugPath = getToReadPath()
 
-  val tiles = new FlowPane {
-    vgap = 10
-  }
-
-  val mainFolder = new FolderPane {}
-  var currentFolder = mainFolder
-
-  val main = new ComboPane("Main Folder", mainFolder, tiles)
-  tiles.children = main
-  allFolders = allFolders :+ main.folder
-
-  folderPaneStructure(fileStructure(debugPath))
-  println(allFolders)
+  val tiles = new FlowPane
+  var mainFolder: FolderPane = null
+  var currentFolder: FolderPane = null
+  refresh()
 
   center = new ScrollPane {
     content = tiles
   }
 
+  def refresh() = {
+    mainFolder = new FolderPane {}
+    currentFolder = mainFolder
+
+    val main = new ComboPane("Main Folder", mainFolder, tiles) {
+      folder.visible = true
+      folder.managed = true
+    }
+
+    tiles.children = main
+    allFolders = allFolders :+ main.folder
+
+    folderPaneStructure(fileStructure(debugPath))
+    (mainFolder, currentFolder)
+  }
+
   def folderPaneStructure(seq: IndexedSeq[(RelPath, Boolean, Path)]): Unit = {
-    println("-" * 40)
     seq.foreach((x, y, z) =>
       if y then
         var parentFolder: Pane = tiles
@@ -53,14 +59,11 @@ class FilePane extends BorderPane {
         if !x.toString.contains("/") then parentFolder = mainFolder
         else {
           val parentId = x.toString.substring(0, x.toString.lastIndexOf("/"))
-          println(parentId)
-          println(x.toString)
           parentFolder = allFolders.filter(p => p.getId.equals(parentId)).head
         }
 
         val newFolder = new FolderPane
         val newCombo = new ComboPane(x.toString, newFolder, tiles)
-
         parentFolder.children += newCombo
         allFolders = allFolders :+ newCombo.folder
 
