@@ -1,7 +1,9 @@
 import scalafx.scene.control.RadioButton
 import scalafx.scene.text.TextAlignment
-
-class PdfPane extends RadioButton {
+import scalafx.Includes.eventClosureWrapperWithZeroParam
+import scalafx.beans.property.StringProperty
+import os.Path
+case class PdfPane(source: Path = os.pwd) extends RadioButton {
   styleClass -= "radio-button"
   styleClass += "pdf-pane"
   minHeight = 155
@@ -12,4 +14,8 @@ class PdfPane extends RadioButton {
 
   wrapText = true
   textAlignment = TextAlignment.Center
+
+  onAction = () => {
+    PanelHandler.rightCreate.update(this)
+  }
 }
