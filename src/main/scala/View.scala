@@ -11,7 +11,6 @@ import scalafx.scene.paint.Color
 import scala.compiletime.ops.boolean
 import scala.sys.process._
 import scala.language.postfixOps
-import customGUIElements._
 
 object GUI extends JFXApp3 {
   override def start(): Unit = {
@@ -20,7 +19,7 @@ object GUI extends JFXApp3 {
 
     stage = new JFXApp3.PrimaryStage {
       title = "Program"
-      width = 1200
+      width = 1245
       height = 800
 
       x = 2200
@@ -35,6 +34,7 @@ object GUI extends JFXApp3 {
           padding = new javafx.geometry.Insets(0, 5, 0, 5)
           left = LabelHandler.dirLabel
           right = LabelHandler.toReadLabel
+          center = LabelHandler.needSortingLabel
         }
 
         val menuBar = new VBox {
@@ -44,12 +44,12 @@ object GUI extends JFXApp3 {
           children = Seq(
             new RadioCustom {
               text = "View"
-              selected = true
+              selected = false
               toggleGroup = tg
             },
             new RadioCustom {
               text = "Create"
-              selected = false
+              selected = true
               toggleGroup = tg
             },
             new StackPane {
@@ -61,7 +61,8 @@ object GUI extends JFXApp3 {
 
                 items = Seq(
                   new MenuItemCustom("Main", stage),
-                  new MenuItemCustom("ToRead", stage)
+                  new MenuItemCustom("ToRead", stage),
+                  new MenuItemCustom("Need Sorting", stage)
                 )
               }
             }
