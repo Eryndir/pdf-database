@@ -1,5 +1,3 @@
-package customGUIElements
-
 import scalafx.Includes._
 import scalafx.scene.control._
 import scalafx.event.ActionEvent

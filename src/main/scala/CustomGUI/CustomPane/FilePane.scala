@@ -1,5 +1,3 @@
-package customGUIElements
-
 import scalafx.Includes._
 import scalafx.Includes.jfxControl2sfx
 import scalafx.scene.layout.BorderPane
@@ -14,6 +12,7 @@ import javax.swing.SwingUtilities
 import scalafx.embed.swing.SwingFXUtils
 import java.awt.image.BufferedImage
 import FilePathHandler._
+import os.Path
 
 class FilePane extends BorderPane {
   val listFiles = getFiles(getMainPath())
@@ -34,4 +33,6 @@ class FilePane extends BorderPane {
   center = new ScrollPane {
     content = tiles
   }
+
+  def createFileStructure: Unit = {}
 }

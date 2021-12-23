@@ -1,5 +1,3 @@
-package customGUIElements
-
 import scalafx.scene.control.Label
 import scalafx.application.Platform
 

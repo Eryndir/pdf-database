@@ -1,5 +1,3 @@
-package scala
-
 import os.Path
 import scala.compiletime.ops.boolean
 import scala.sys.process._
@@ -8,10 +6,7 @@ import os.RelPath
 
 object FilePathHandler:
   def getFiles(path: Path): IndexedSeq[Path] =
-    println(path)
-    val seq = os.walk(path, includeTarget = true)
-    seq.foreach(println)
-    seq
+    os.walk(path, includeTarget = false)
 
   def getWinPath(path: String): Path =
     Path(s"wslpath -w \"$path\"".!!.stripTrailing)
@@ -26,4 +21,4 @@ object FilePathHandler:
     Path(string)
 
   def getMainPath(): Path =
-    FilePathHandler.getUnixPath(ConfigReader.getProperty("ToReadPath"))
+    getUnixPath(ConfigReader.getProperty("ToReadPath"))

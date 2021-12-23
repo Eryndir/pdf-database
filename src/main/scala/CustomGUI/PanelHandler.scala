@@ -1,5 +1,3 @@
-package customGUIElements
-
 import scalafx.scene.layout.BorderPane
 import scalafx.scene.control.Label
 import State._

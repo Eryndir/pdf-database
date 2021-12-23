@@ -1,5 +1,3 @@
-package scala
-
 import java.{util => ju}
 import java.io._
 

@@ -1,5 +1,3 @@
-package customGUIElements
-
 import scalafx.scene.control.RadioButton
 import scalafx.scene.text.TextAlignment
 
