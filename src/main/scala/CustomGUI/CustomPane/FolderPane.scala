@@ -9,11 +9,14 @@ import scalafx.Includes.eventClosureWrapperWithZeroParam
 class FolderPane extends FlowPane {
   styleClass += "folder-pane"
   prefWrapLength = 110 * 5
+  vgap = 10
 
 }
 
 case class ComboPane(labelText: String, folder: FolderPane, tiles: FlowPane)
     extends BorderPane {
+  folder.visible = false
+  folder.managed = false
   top = new BorderPane {
     center = new Label(labelText) {
       styleClass += "folder-label"
