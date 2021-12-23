@@ -11,7 +11,8 @@ case class pdfObject(
     extraMaterial: String = "N/A",
     category: Category = Category.Uncategorized,
     categoryInfo: List[String] = List(), // BUILDER PATTERN?
-    rpg: String = "System Neutral"
+    rpg: String = "System Neutral",
+    description: String = "N/A"
 ):
 
   def categorySpecifics: String =
@@ -33,6 +34,7 @@ case class pdfObject(
 
   override def toString =
     s"$name - $categoryName\n" +
+      s"| $rpg\n" +
       s"| $rpg\n" +
       s"| Source: $getWinPdf\n" +
       s"| drivelink: $driveLink\n" +
