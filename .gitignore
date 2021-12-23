@@ -30,4 +30,6 @@ tokens
 *.class
 *.log
 *.sc
+
+LayoutFlowPane.java
 # End of https://www.gitignore.io/api/sbt,scala
