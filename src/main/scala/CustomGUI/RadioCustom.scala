@@ -19,7 +19,7 @@ class RadioCustom extends RadioButton {
   minHeight = 50
   minWidth = 100
 
-  onAction = (e: ActionEvent) => {
+  onAction = () => {
     text.value match {
 
       case "View"   => PanelHandler.update(VIEW)
