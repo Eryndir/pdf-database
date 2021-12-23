@@ -3,7 +3,7 @@ import scalafx.scene.text.TextAlignment
 
 class PdfPane extends RadioButton {
   styleClass -= "radio-button"
-  styleClass += "toggle-button"
+  styleClass += "pdf-pane"
   minHeight = 155
   minWidth = 110
 
