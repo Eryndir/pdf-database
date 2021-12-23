@@ -12,15 +12,43 @@
   -fx-background-color: rgb(200, 200, 200);
 }
 
+.folder-pane {
+  -fx-border-color: rgb(150, 150, 150);
+  -fx-border-radius: 10;
+  -fx-background-color: rgba(175, 175, 175, 0.253);
+  -fx-background-radius: 10;
+}
+
+.folder-label {
+  -fx-border-color: rgb(150, 150, 150);
+  -fx-background-color: rgba(175, 175, 175, 0.253);
+  -fx-padding: 2 10 2 10;
+}
+
 .toggle-button {
   -fx-background-color: rgb(175, 175, 175);
   -fx-padding: 10 0 10 0;
+  -fx-background-insets: 2 2 2 2;
   -fx-focus-color: transparent;
   -fx-faint-focus-color: transparent;
-  -fx-background-radius: 0;
+  -fx-background-radius: 10;
+}
+
+.pdf-pane {
+  -fx-background-color: rgb(175, 175, 175);
+  -fx-padding: 10 0 10 0;
+  -fx-background-insets: 2 2 2 2;
+  -fx-focus-color: transparent;
+  -fx-faint-focus-color: transparent;
+  -fx-background-radius: 10;
+  -fx-label-padding: 10 10 10 10;
 }
 
 .toggle-button:selected {
+  -fx-background-color: rgb(192, 75, 75);
+}
+
+.pdf-pane:selected {
   -fx-background-color: rgb(192, 75, 75);
 }
 
