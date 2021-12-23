@@ -14,14 +14,11 @@ import scala.language.postfixOps
 
 object GUI extends JFXApp3 {
   override def start(): Unit = {
-    val driveHandler = new DriveHandler
     val dbHandler = new DBHandler
 
     stage = new JFXApp3.PrimaryStage {
       title = "Program"
-      width = 1245
-      height = 800
-
+      fullScreen = true
       x = 2200
       y = 750
 
