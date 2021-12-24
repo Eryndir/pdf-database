@@ -19,17 +19,27 @@ import scalafx.geometry.Pos
 import scalafx.scene.layout.HBox
 import scalafx.scene.input.MouseEvent
 import scalafx.scene.layout.Pane
+import java.util.concurrent.ExecutorService
+import java.util.concurrent.Executors
+import scalafx.application.Platform
 
 class FilePane extends BorderPane {
   minWidth = (110 * 5) + 5
   val tgFiles = new ToggleGroup
   var allFolders: List[Pane] = List()
+
   val debugPath = getToReadPath()
 
   val tiles = new FlowPane
   var mainFolder: FolderPane = null
+
   var currentFolder: FolderPane = null
-  refresh()
+
+  var loadingFinished = false
+  GUI.pool.execute(() => {
+    refresh()
+    loadingFinished = true
+  })
 
   center = new ScrollPane {
     content = tiles
@@ -54,26 +64,35 @@ class FilePane extends BorderPane {
   def folderPaneStructure(seq: IndexedSeq[(RelPath, Boolean, Path)]): Unit = {
     seq.foreach((x, y, z) =>
       if y then
-        var parentFolder: Pane = tiles
+        Platform.runLater(
+          () -> {
+            var parentFolder: Pane = tiles
 
-        if !x.toString.contains("/") then parentFolder = mainFolder
-        else {
-          val parentId = x.toString.substring(0, x.toString.lastIndexOf("/"))
-          parentFolder = allFolders.filter(p => p.getId.equals(parentId)).head
-        }
+            if !x.toString.contains("/") then parentFolder = mainFolder
+            else {
+              val parentId =
+                x.toString.substring(0, x.toString.lastIndexOf("/"))
+              parentFolder =
+                allFolders.filter(p => p.getId.equals(parentId)).head
+            }
 
-        val newFolder = new FolderPane
-        val newCombo = new ComboPane(x.toString, newFolder, tiles)
-        parentFolder.children += newCombo
-        allFolders = allFolders :+ newCombo.folder
+            val newFolder = new FolderPane
+            val newCombo = new ComboPane(x.toString, newFolder, tiles)
+            parentFolder.children += newCombo
+            allFolders = allFolders :+ newCombo.folder
 
-        currentFolder = newFolder
+            currentFolder = newFolder
+          }
+        );
+
         folderPaneStructure(fileStructure(z))
       else
-        currentFolder.children += new PdfPane(z) {
-          text = x.last.dropRight(4)
-          toggleGroup = tgFiles
-        }
+        Platform.runLater(() -> {
+          currentFolder.children += new PdfPane(z) {
+            text = x.last.dropRight(4)
+            toggleGroup = tgFiles
+          }
+        })
     )
 
   }
