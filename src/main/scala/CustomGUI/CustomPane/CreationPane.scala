@@ -19,11 +19,7 @@ class CreationPane extends BorderPane {
   visible = true
   var comboList: List[ComboText] = List()
 
-  val pdfWindow = new PdfPane {
-    styleClass -= "pdf-pane"
-    styleClass += "pdf-window"
-    minHeight = 155 * 2
-    minWidth = 110 * 2
+  var driveSearch = false
 
     maxHeight = 155 * 2
     maxWidth = 110 * 2
@@ -45,7 +41,13 @@ class CreationPane extends BorderPane {
         right = menu
       },
       new ComboText("Source"),
-      new ComboText("driveLink"),
+      new ComboText("driveLink") {
+        center = new CheckBox {
+          onAction = () => {
+            driveSearch = !driveSearch
+          }
+        }
+      },
       new ComboText("genre"),
       new ComboText("pageNumbers"),
       new ComboText("rating"),
@@ -81,7 +83,10 @@ class CreationPane extends BorderPane {
     val sel = new java.awt.datatransfer.StringSelection(pdfName)
     clipboard.setContents(sel, sel)
 
-    pdfWindow.text = pdfName
+      var driveLink = ""
+
+      if driveSearch then driveLink = driveHandler.getFileLink(pdfName)
+
     comboList(0).update(pdfName)
     comboList(3).update(pdfSource)
     comboList(4).update(driveHandler.getFileLink(pdfName))
