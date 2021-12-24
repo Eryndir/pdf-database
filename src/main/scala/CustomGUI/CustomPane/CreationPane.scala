@@ -106,6 +106,7 @@ class CreationPane extends BorderPane {
     val sel = new java.awt.datatransfer.StringSelection(pdfName)
     clipboard.setContents(sel, sel)
 
+    GUI.pool.execute(() => {
       val pdf = PDDocument.load(new File(pdfSourceString))
       val pdfNoPages = pdf.getNumberOfPages()
       val pdfImage = resizeImage(PDFRenderer(pdf).renderImage(0))
@@ -113,15 +114,20 @@ class CreationPane extends BorderPane {
 
       if driveSearch then driveLink = driveHandler.getFileLink(pdfName)
 
+      Platform.runLater(() -> {
         pdfWindow.image = SwingFXUtils.toFXImage(pdfImage, null)
-    comboList(0).update(pdfName)
-    comboList(3).update(pdfSource)
+        comboList(0).update(pdfName)
+        comboList(3).update(pdfSource)
         comboList(4).update(driveLink)
         comboList(6).update("" + pdfNoPages)
         comboList(8).update(pdfSource.substring(0, pdfSource.lastIndexOf("\\")))
         GUI.stage.getScene.cursor = Cursor.sfxCursor2jfx(Cursor.Default)
+      })
       pdf.close()
       println("PDF info gotten")
+    })
+  }
+
   def resizeImage(image: BufferedImage): BufferedImage = {
     Thumbnails.of(image).scale(0.60).asBufferedImage
   }
