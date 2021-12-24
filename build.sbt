@@ -1,4 +1,4 @@
-val scala3Version = "3.0.0"
+val scala3Version = "3.1.0"
 
 lazy val root = project
   .in(file("."))
@@ -19,7 +19,7 @@ libraryDependencies += "org.xerial" % "sqlite-jdbc" % "3.34.0"
 libraryDependencies += "com.lihaoyi" %% "os-lib" % "0.7.8"
 
 libraryDependencies += "net.coobird" % "thumbnailator" % "[0.4, 0.5)"
-
+libraryDependencies += "org.apache.pdfbox" % "pdfbox" % "2.0.25"
 // Add dependency on ScalaFX library
 libraryDependencies += "org.scalafx" %% "scalafx" % "16.0.0-R25"
 libraryDependencies += "org.controlsfx" % "controlsfx" % "11.1.1"
