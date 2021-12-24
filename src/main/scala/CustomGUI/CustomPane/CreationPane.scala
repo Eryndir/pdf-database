@@ -10,8 +10,22 @@ import scalafx.scene.control.MenuItem
 import scalafx.scene.control.MenuButton
 import collection.JavaConverters._
 import scalafx.scene.control.Button
+import FilePathHandler._
 import java.awt.Desktop
 import java.net.{URI, URL}
+import scalafx.scene.control.CheckBox
+import org.apache.pdfbox._
+import org.apache.pdfbox.pdmodel.PDDocument
+import java.io.File
+import scalafx.application.Platform
+import scalafx.scene.Cursor
+import org.apache.pdfbox.rendering.PDFRenderer
+import scalafx.scene.image.Image
+import scalafx.embed.swing.SwingFXUtils
+import scalafx.scene.image.ImageView
+import java.awt.image.BufferedImage
+import net.coobird.thumbnailator.Thumbnails
+import javafx.css.PseudoClass
 
 class CreationPane extends BorderPane {
   val driveHandler = new DriveHandler
@@ -21,8 +35,8 @@ class CreationPane extends BorderPane {
 
   var driveSearch = false
 
-    maxHeight = 155 * 2
-    maxWidth = 110 * 2
+  val pdfWindow = new ImageView() {
+    alignmentInParent = Pos.Center
   }
 
   left = new FlowPane {
@@ -77,19 +91,30 @@ class CreationPane extends BorderPane {
   }
   def update(pdf: PdfPane) = {
     val pdfName = pdf.text.value
-    val pdfSource = pdf.source.toString
+    val pdfSourceString = pdf.source.toString
+    val pdfSource = getWinPath(pdfSourceString)
 
     val clipboard = java.awt.Toolkit.getDefaultToolkit.getSystemClipboard
     val sel = new java.awt.datatransfer.StringSelection(pdfName)
     clipboard.setContents(sel, sel)
 
+      val pdf = PDDocument.load(new File(pdfSourceString))
+      val pdfNoPages = pdf.getNumberOfPages()
+      val pdfImage = resizeImage(PDFRenderer(pdf).renderImage(0))
       var driveLink = ""
 
       if driveSearch then driveLink = driveHandler.getFileLink(pdfName)
 
+        pdfWindow.image = SwingFXUtils.toFXImage(pdfImage, null)
     comboList(0).update(pdfName)
     comboList(3).update(pdfSource)
-    comboList(4).update(driveHandler.getFileLink(pdfName))
-    comboList(8).update(pdfSource.substring(0, pdfSource.lastIndexOf("/")))
+        comboList(4).update(driveLink)
+        comboList(6).update("" + pdfNoPages)
+        comboList(8).update(pdfSource.substring(0, pdfSource.lastIndexOf("\\")))
+        GUI.stage.getScene.cursor = Cursor.sfxCursor2jfx(Cursor.Default)
+      pdf.close()
+      println("PDF info gotten")
+  def resizeImage(image: BufferedImage): BufferedImage = {
+    Thumbnails.of(image).scale(0.60).asBufferedImage
   }
 }
