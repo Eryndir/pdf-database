@@ -87,7 +87,15 @@ class CreationPane extends BorderPane {
   right = new BorderPane {
     top = pdfWindow
 
-    center = new Button("CREATE")
+    bottom = new FlowPane {
+      alignment = Pos.Center
+      children = Seq(
+        new ComboText("Folder"),
+        new Button("CREATE") {
+          alignmentInParent = Pos.Center
+        }
+      )
+    }
   }
   def update(pdf: PdfPane) = {
     val pdfName = pdf.text.value
