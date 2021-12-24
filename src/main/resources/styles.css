@@ -47,19 +47,6 @@
   -fx-label-padding: 10 10 10 10;
 }
 
-.pdf-window {
-  -fx-background-color: rgb(175, 175, 175);
-  -fx-border-color: rgb(150, 150, 150);
-  -fx-border-radius: 10;
-  -fx-border-insets: 2 2 2 2;
-  -fx-padding: 10 0 10 0;
-  -fx-background-insets: 2 2 2 2;
-  -fx-focus-color: transparent;
-  -fx-faint-focus-color: transparent;
-  -fx-background-radius: 10;
-  -fx-label-padding: 10 10 10 10;
-}
-
 .toggle-button:selected {
   -fx-background-color: rgb(192, 75, 75);
 }
