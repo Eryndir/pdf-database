@@ -11,17 +11,23 @@ import scalafx.scene.paint.Color
 import scala.compiletime.ops.boolean
 import scala.sys.process._
 import scala.language.postfixOps
+import java.util.concurrent.ExecutorService
+import java.util.concurrent.Executors
 
 object GUI extends JFXApp3 {
+  val pool: ExecutorService = Executors.newFixedThreadPool(4)
   override def start(): Unit = {
     val dbHandler = new DBHandler
 
     stage = new JFXApp3.PrimaryStage {
-      title = "Program"
-      fullScreen = true
-      x = 2200
+      title = "GM-Database"
+      x = 1950
       y = 750
 
+      maximized = true
+
+      onCloseRequest_=(() => System.exit(0))
+      resizable = false
       scene = new Scene {
         stylesheets = List(getClass.getResource("styles.css").toExternalForm)
 
