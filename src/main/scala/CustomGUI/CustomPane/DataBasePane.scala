@@ -9,6 +9,7 @@ import FilePathHandler._
 
 class DataBasePane extends BorderPane {
   minWidth = (110 * 5) + 5
+  maxWidth = (110 * 5) + 5
   val tgFiles = new ToggleGroup
   var allFolders: List[Pane] = List()
 

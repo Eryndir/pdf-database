@@ -39,7 +39,7 @@ class CreationPane extends BorderPane {
   var driveSearch = false
   var pdfDest = ""
 
-  val pdfWindow = new ImageView() {
+  val pdfWindow = new ImageView {
     alignmentInParent = Pos.Center
   }
 
