@@ -7,6 +7,7 @@ import scalafx.application.Platform
 import scalafx.Includes._
 import scalafx.application.JFXApp3
 import scalafx.scene.Cursor
+import State._
 
 case class PdfPane(source: Path = os.pwd, parentCombo: ComboPane = null)
     extends RadioButton {
@@ -21,10 +22,16 @@ case class PdfPane(source: Path = os.pwd, parentCombo: ComboPane = null)
   textAlignment = TextAlignment.Center
 
   onAction = () => {
-    Platform.runLater(() -> {
-      GUI.stage.getScene.cursor = Cursor.sfxCursor2jfx(Cursor.Wait)
-    })
-    if PanelHandler.leftCreate.loadingFinished then
-      PanelHandler.rightCreate.update(this)
+    PanelHandler.panelState match {
+      case CREATE => {
+        Platform.runLater(() -> {
+          GUI.stage.getScene.cursor = Cursor.sfxCursor2jfx(Cursor.Wait)
+        })
+        if !PanelHandler.leftCreate.loading then
+          PanelHandler.rightCreate.update(this)
+      }
+      case VIEW => ()
+    }
+
   }
 }

@@ -5,12 +5,11 @@ import java.util.logging.FileHandler
 
 object PanelHandler {
 
+  var panelState: State = CREATE
   val leftCreate = new FilePane
   val rightCreate = new CreationPane
-  val leftView = new BorderPane {
-    style = " -fx-background-color: black;"
+  val leftView = new DataBasePane {
     visible = false
-    top = new Label("leftView")
   }
   val rightView = new BorderPane {
     style = " -fx-background-color: white;"
@@ -21,12 +20,14 @@ object PanelHandler {
   def update(state: State): Unit = {
     state match {
       case CREATE => {
+        panelState = CREATE
         leftCreate.visible = true
         rightCreate.visible = true
         leftView.visible = false
         rightView.visible = false
       }
       case VIEW => {
+        panelState = VIEW
         leftCreate.visible = false
         rightCreate.visible = false
         leftView.visible = true

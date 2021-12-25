@@ -43,6 +43,7 @@ case class pdfObject(
       s"| Read: $read, Favourite: $favourite\n" +
       s"| Extra material: $extraMaterial" +
       s"$categorySpecifics";
+
   def toStringSmall =
     s"$name - $categoryName\n"
 

@@ -13,11 +13,15 @@ import scala.sys.process._
 import scala.language.postfixOps
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
+import State._
 
 object GUI extends JFXApp3 {
   val pool: ExecutorService = Executors.newFixedThreadPool(4)
+  val driveHandler = new DriveHandler
+  val dbHandler = new DBHandler
+  //dbHandler.emptyTable
+
   override def start(): Unit = {
-    val dbHandler = new DBHandler
 
     stage = new JFXApp3.PrimaryStage {
       title = "GM-Database"
@@ -65,7 +69,11 @@ object GUI extends JFXApp3 {
                   minHeight = 50
                   minWidth = 100
                   onAction = (e: ActionEvent) => {
-                    PanelHandler.leftCreate.refresh()
+                    PanelHandler.panelState match {
+                      case CREATE => PanelHandler.leftCreate.refresh()
+                      case VIEW   => PanelHandler.leftView.refresh()
+                    }
+
                   }
 
                 },
