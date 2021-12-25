@@ -8,7 +8,6 @@ import scalafx.scene.control.TextArea
 import scalafx.scene.control.TextField
 import scalafx.scene.control.MenuItem
 import scalafx.scene.control.MenuButton
-import collection.JavaConverters._
 import scalafx.scene.control.Button
 import FilePathHandler._
 import java.awt.Desktop
@@ -38,6 +37,7 @@ class CreationPane extends BorderPane {
   var comboList: List[ComboText] = List()
   var driveSearch = false
   var pdfDest = ""
+  var folderChange = false
 
   val pdfWindow = new ImageView {
     alignmentInParent = Pos.Center
@@ -48,7 +48,7 @@ class CreationPane extends BorderPane {
     visible = false
   }
 
-  val comboBox = new ComboBox(Category.values)
+  val comboBox = new ComboBox(Category.values.toIndexedSeq)
   comboBox.getSelectionModel.selectLast
 
   val tagArea = new TextArea {
@@ -100,6 +100,11 @@ class CreationPane extends BorderPane {
       alignment = Pos.Center
       children = Seq(
         new ComboText("Folder") {
+          center = new CheckBox {
+            onAction = () => {
+              folderChange = !folderChange
+            }
+          }
           right = new Button("Select Folder") {
             onAction = () => {
               val dirChooser = new DirectoryChooser {
@@ -123,7 +128,9 @@ class CreationPane extends BorderPane {
   }
 
   def update(pdf: PdfPane) = {
-    createButton.visible = false
+    if folderChange then createButton.visible = false
+    else createButton.visible = true
+
     createButton.setOnAction(() => {
       Platform.runLater(() -> {
         val childList = pdf.parentCombo.folder.getChildren
@@ -145,7 +152,7 @@ class CreationPane extends BorderPane {
               tags = tagArea.text.value.split("\n").toList
             )
           )
-          os.move.into(pdf.source, Path(pdfDest))
+          if folderChange then os.move.into(pdf.source, Path(pdfDest))
         })
         if childList.size == 0 then
           pdf.parentCombo.folder.parentFolder.getChildren
@@ -191,6 +198,6 @@ class CreationPane extends BorderPane {
   }
 
   def resizeImage(image: BufferedImage): BufferedImage = {
-    Thumbnails.of(image).scale(0.60).asBufferedImage
+    Thumbnails.of(image).size(620, 440).asBufferedImage
   }
 }
