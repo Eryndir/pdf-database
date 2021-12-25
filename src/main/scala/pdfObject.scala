@@ -30,13 +30,11 @@ case class pdfObject(
 
   def categoryName: String = category.title
 
-  def getWinPdf: String = source.replace("/", "\\") ++ ".pdf"
-
   override def toString =
     s"$name - $categoryName\n" +
       s"| $rpg\n" +
       s"| $rpg\n" +
-      s"| Source: $getWinPdf\n" +
+      s"| Source: $source\n" +
       s"| drivelink: $driveLink\n" +
       s"| Genre: $genre, Tags: ${tags.mkString(", ")}\n" +
       s"| Pages: $pageNumbers, Rating: $rating\n" +
