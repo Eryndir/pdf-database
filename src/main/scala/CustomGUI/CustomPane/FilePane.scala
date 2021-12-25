@@ -36,19 +36,17 @@ class FilePane extends BorderPane {
   var currentFolder: FolderPane = null
   var currentCombo: ComboPane = null
 
-  var loadingFinished = false
-  GUI.pool.execute(() => {
-    refresh()
-    loadingFinished = true
-  })
+  var loading = false
 
   center = new ScrollPane {
     content = tiles
   }
 
   def refresh() = {
+    loading = true
     mainFolder = new FolderPane(tiles)
     currentFolder = mainFolder
+    allFolders = List()
 
     val main = new ComboPane("Main Folder", mainFolder, tiles) {
       folder.visible = true
@@ -60,7 +58,7 @@ class FilePane extends BorderPane {
     allFolders = allFolders :+ main.folder
 
     folderPaneStructure(fileStructure(debugPath))
-    (mainFolder, currentFolder)
+    loading = false
   }
 
   def folderPaneStructure(seq: IndexedSeq[(RelPath, Boolean, Path)]): Unit = {
