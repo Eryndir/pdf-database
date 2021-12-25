@@ -5,7 +5,7 @@ import scalafx.Includes._
 import scalafx.Includes.jfxControl2sfx
 import scalafx.geometry.Pos
 
-class ComboText(lText: String) extends BorderPane {
+case class ComboText(lText: String) extends BorderPane {
   minWidth = 600
   padding = new javafx.geometry.Insets(10, 10, 10, 10)
   left = new Label(lText) {
@@ -19,5 +19,11 @@ class ComboText(lText: String) extends BorderPane {
 
   def update(value: String) = {
     textfield.text = value
+  }
+  def clear() = {
+    textfield.clear
+  }
+  def text = {
+    textfield.text.value
   }
 }
