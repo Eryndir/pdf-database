@@ -30,8 +30,8 @@ object LabelHandler {
         }
         case "Need Sorting" => {
           ConfigReader.setProperty("NotSortedPath", value)
-          toReadLabel.setText(
-            s"ToRead: ${ConfigReader.getProperty("NotSortedPath")}"
+          needSortingLabel.setText(
+            s"Need Sorting: ${ConfigReader.getProperty("NotSortedPath")}"
           )
         }
       }
