@@ -48,6 +48,6 @@ class ViewerPane extends BorderPane {
     })
   }
   def resizeImage(image: BufferedImage): BufferedImage = {
-    Thumbnails.of(image).scale(0.60).asBufferedImage
+    Thumbnails.of(image).size(620, 440).asBufferedImage
   }
 }
