@@ -24,13 +24,14 @@ case class PdfPane(source: Path = os.pwd, parentCombo: ComboPane = null)
   onAction = () => {
     PanelHandler.panelState match {
       case CREATE => {
+        println("lmao")
         Platform.runLater(() -> {
           GUI.stage.getScene.cursor = Cursor.sfxCursor2jfx(Cursor.Wait)
         })
         if !PanelHandler.leftCreate.loading then
           PanelHandler.rightCreate.update(this)
       }
-      case VIEW => ()
+      case VIEW => PanelHandler.rightView.update(this)
     }
 
   }

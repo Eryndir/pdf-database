@@ -19,7 +19,6 @@ object GUI extends JFXApp3 {
   val pool: ExecutorService = Executors.newFixedThreadPool(4)
   val driveHandler = new DriveHandler
   val dbHandler = new DBHandler
-  //dbHandler.emptyTable
 
   override def start(): Unit = {
 
@@ -71,7 +70,7 @@ object GUI extends JFXApp3 {
                   onAction = (e: ActionEvent) => {
                     PanelHandler.panelState match {
                       case CREATE => PanelHandler.leftCreate.refresh()
-                      case VIEW   => PanelHandler.leftView.refresh()
+                      case VIEW   => PanelHandler.centerView.refresh()
                     }
 
                   }
@@ -92,14 +91,10 @@ object GUI extends JFXApp3 {
           )
         }
 
-        val main = new SplitPane {
-          items ++= List(
-            new StackPane {
-              children = Seq(PanelHandler.leftCreate, PanelHandler.leftView)
-            },
-            new StackPane {
-              children = Seq(PanelHandler.rightCreate, PanelHandler.rightView)
-            }
+        val main = new StackPane {
+          children = Seq(
+            PanelHandler.createPane,
+            PanelHandler.viewPane
           )
         }
 
