@@ -22,13 +22,12 @@ import scalafx.scene.layout.Pane
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
 import scalafx.application.Platform
+import GUI._
 
 class FilePane extends BorderPane {
   minWidth = (110 * 5) + 5
   val tgFiles = new ToggleGroup
   var allFolders: List[Pane] = List()
-
-  val debugPath = getToReadPath()
 
   val tiles = new FlowPane
   var mainFolder: FolderPane = null
@@ -57,7 +56,7 @@ class FilePane extends BorderPane {
     tiles.children = main
     allFolders = allFolders :+ main.folder
 
-    folderPaneStructure(fileStructure(debugPath))
+    folderPaneStructure(fileStructure(getNeedSortingPath()))
     loading = false
   }
 
@@ -88,23 +87,27 @@ class FilePane extends BorderPane {
 
         folderPaneStructure(fileStructure(z))
       else
+
         Platform.runLater(() -> {
-          currentFolder.children += new PdfPane(z, currentCombo) {
-            text = x.last.dropRight(4)
-            toggleGroup = tgFiles
+          if !dbHandler.isInDB(z) then {
+            currentFolder.children += new PdfPane(z, currentCombo) {
+              text = x.last.dropRight(4)
+              toggleGroup = tgFiles
+            }
           }
         })
     )
-
   }
 
   def fileStructure(p: Path): IndexedSeq[(RelPath, Boolean, Path)] = {
+
     val files = getFiles(p)
-      .map(x => x.relativeTo(debugPath))
+      .map(x => x.relativeTo(getNeedSortingPath()))
       .lazyZip(getFiles(p).map(os.isDir))
       .lazyZip(getFiles(p))
       .toIndexedSeq
 
     files.sortBy(_._2)
+
   }
 }
