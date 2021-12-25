@@ -31,7 +31,7 @@ class DataBasePane extends BorderPane {
     mainFolder = new FolderPane(tiles)
     currentFolder = mainFolder
     allFolders = List()
-    val main = new ComboPane("Main Folder", mainFolder, tiles) {
+    val main = new ComboPane("D:\\Roleplaying games", mainFolder, tiles) {
       folder.visible = true
       folder.managed = true
     }
@@ -50,15 +50,14 @@ class DataBasePane extends BorderPane {
     val foldersSorted = touple._1.toList.sorted
     val entries = touple._2
 
-    val root = foldersSorted.head
+    val root = "D:\\Roleplaying games"
     Platform.runLater(() -> {
       foldersSorted.foreach(x => {
         var parentFolder: Pane = tiles
-
-        var parentId = x.substring(0, x.lastIndexOf("\\"))
         if x.equals(root) then parentFolder = mainFolder
         else {
-          parentFolder = allFolders.filter(p => p.getId.equals(parentId)).head
+
+          parentFolder = getParentFolder(x)
         }
 
         val newFolder = new FolderPane(parentFolder)
@@ -72,6 +71,7 @@ class DataBasePane extends BorderPane {
 
       entries.foreach(x => {
         val folder = x.substring(0, x.lastIndexOf("\\"))
+        val pdf = dbHandler.getFromSource(x)
         val path = Path(getUnixPath(x))
         allFolders
           .filter(p => p.getId.equals(folder))
@@ -80,7 +80,7 @@ class DataBasePane extends BorderPane {
           .insert(
             0,
             new PdfPane(path) {
-              text = path.last.dropRight(4)
+              text = pdf.name
               toggleGroup = tgFiles
             }
           )
@@ -101,5 +101,13 @@ class DataBasePane extends BorderPane {
       entryPaths = entryPaths :+ str
     }
     (folderPaths, entryPaths)
+  }
+
+  def getParentFolder(parentId: String): Pane = {
+    val optionList = allFolders.filter(p => p.getId.equals(parentId))
+    val newParentId = parentId.substring(0, parentId.lastIndexOf("\\"))
+    println(newParentId)
+    if optionList.size == 0 then getParentFolder(newParentId)
+    else optionList.head
   }
 }
