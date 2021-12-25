@@ -3,6 +3,8 @@ import java.sql.DriverManager
 import scala.compiletime.ops.boolean
 import scala.sys.process._
 import scala.language.postfixOps
+import os.Path
+import FilePathHandler._
 
 class DBHandler:
   var hasData = false
@@ -44,26 +46,42 @@ class DBHandler:
 
   def addEntry(pdf: pdfObject): Unit =
     if con == null then getConnection
+
     val prep =
       con.prepareStatement(
         s"INSERT INTO pdfs (name, source, driveLink, genre, tags, pageNumbers, rating, read, favourite, extramaterial, category, rpg, description) " +
-          s"values('${pdf.name}','${pdf.source}','${pdf.driveLink}'," +
-          s"'${pdf.genre}','${pdf.tags.toString}',${pdf.pageNumbers}," +
-          s"'${pdf.rating}','${pdf.read}','${pdf.favourite}','${pdf.extraMaterial}'," +
-          s"'${pdf.category.title}','${pdf.rpg}','${pdf.description}')"
+          s"values(?,?,?," +
+          s"?,?,?," +
+          s"?,?,?,?," +
+          s"?,?,?)"
       )
+    prep.setString(1, pdf.name)
+    prep.setString(2, pdf.source)
+    prep.setString(3, pdf.driveLink)
+    prep.setString(4, pdf.genre)
+    prep.setString(5, pdf.tags.toString)
+    prep.setInt(6, pdf.pageNumbers)
+    prep.setString(7, pdf.rating)
+    prep.setString(8, pdf.read.toString)
+    prep.setString(9, pdf.favourite.toString)
+    prep.setString(10, pdf.extraMaterial)
+    prep.setString(11, pdf.category.title)
+    prep.setString(12, pdf.rpg)
+    prep.setString(13, pdf.description)
 
     prep.execute
 
   def searchEntry(name: String): ResultSet =
-    if con == null then getConnection
-    println("Searching")
+    if con == null then
+
+      println("Searching")
     val statement = con.createStatement
     val res = statement.executeQuery(s"SELECT * FROM pdfs Where name='$name'")
     res
 
   def getAllFolders(): ResultSet =
     if con == null then getConnection
+
     println("getting Folders...")
     val statement = con.createStatement
     statement.executeQuery("select distinct source from pdfs")
@@ -91,6 +109,7 @@ class DBHandler:
       res.getString(10),
       Category.Uncategorized
     )
+    res.close
     pdf
 
   def emptyTable: Unit =
@@ -101,11 +120,35 @@ class DBHandler:
     if (input.equals("yes")) {
       val statement = con.prepareStatement("delete from pdfs")
       statement.execute
+      statement.close
     }
 
   def openFile(name: String): Unit =
+    if con == null then getConnection
+
     val searchRes = searchEntry(name)
     val pdf = getRow(searchRes)
     val pdfSource = s"'${pdf.source}'"
     println(pdfSource)
     s"wslview $pdfSource" !
+
+  def isInDB(path: Path): Boolean = {
+    if con == null then getConnection
+    val source = getWinPath(path.toString)
+    val prep = con.prepareStatement(
+      s"select * from pdfs where source = ?"
+    )
+    prep.setString(1, source)
+    val res = prep.executeQuery
+    res.next
+  }
+
+  def getFromSource(path: String): pdfObject = {
+    if con == null then getConnection
+    val prep = con.prepareStatement(
+      s"select * from pdfs where source = ?"
+    )
+    prep.setString(1, path)
+    val res = prep.executeQuery
+    getRow(res)
+  }
