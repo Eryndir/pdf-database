@@ -34,6 +34,7 @@ class FilePane extends BorderPane {
   var mainFolder: FolderPane = null
 
   var currentFolder: FolderPane = null
+  var currentCombo: ComboPane = null
 
   var loadingFinished = false
   GUI.pool.execute(() => {
@@ -46,13 +47,14 @@ class FilePane extends BorderPane {
   }
 
   def refresh() = {
-    mainFolder = new FolderPane {}
+    mainFolder = new FolderPane(tiles)
     currentFolder = mainFolder
 
     val main = new ComboPane("Main Folder", mainFolder, tiles) {
       folder.visible = true
       folder.managed = true
     }
+    currentCombo = main
 
     tiles.children = main
     allFolders = allFolders :+ main.folder
@@ -76,8 +78,9 @@ class FilePane extends BorderPane {
                 allFolders.filter(p => p.getId.equals(parentId)).head
             }
 
-            val newFolder = new FolderPane
+            val newFolder = new FolderPane(parentFolder)
             val newCombo = new ComboPane(x.toString, newFolder, tiles)
+            currentCombo = newCombo
             parentFolder.children += newCombo
             allFolders = allFolders :+ newCombo.folder
 
@@ -88,7 +91,7 @@ class FilePane extends BorderPane {
         folderPaneStructure(fileStructure(z))
       else
         Platform.runLater(() -> {
-          currentFolder.children += new PdfPane(z) {
+          currentFolder.children += new PdfPane(z, currentCombo) {
             text = x.last.dropRight(4)
             toggleGroup = tgFiles
           }
