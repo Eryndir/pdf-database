@@ -8,7 +8,8 @@ import scalafx.Includes._
 import scalafx.application.JFXApp3
 import scalafx.scene.Cursor
 
-case class PdfPane(source: Path = os.pwd) extends RadioButton {
+case class PdfPane(source: Path = os.pwd, parentCombo: ComboPane = null)
+    extends RadioButton {
   styleClass -= "radio-button"
   styleClass += "pdf-pane"
   minHeight = 155
