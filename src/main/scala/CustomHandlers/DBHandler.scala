@@ -106,6 +106,6 @@ class DBHandler:
   def openFile(name: String): Unit =
     val searchRes = searchEntry(name)
     val pdf = getRow(searchRes)
-    val pdfSource = s"'${pdf.getWinPdf}'"
+    val pdfSource = s"'${pdf.source}'"
     println(pdfSource)
     s"wslview $pdfSource" !
