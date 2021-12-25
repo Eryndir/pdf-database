@@ -28,14 +28,19 @@ import net.coobird.thumbnailator.Thumbnails
 import javafx.css.PseudoClass
 
 class CreationPane extends BorderPane {
-  val driveHandler = new DriveHandler
   padding = new javafx.geometry.Insets(10, 10, 10, 10)
   visible = true
-  var comboList: List[ComboText] = List()
 
+  val driveHandler = new DriveHandler
+  var comboList: List[ComboText] = List()
   var driveSearch = false
+  //var localPdf: PdfPane = null
 
   val pdfWindow = new ImageView() {
+    alignmentInParent = Pos.Center
+  }
+
+  val createButton = new Button("CREATE") {
     alignmentInParent = Pos.Center
   }
 
@@ -91,13 +96,21 @@ class CreationPane extends BorderPane {
       alignment = Pos.Center
       children = Seq(
         new ComboText("Folder"),
-        new Button("CREATE") {
-          alignmentInParent = Pos.Center
-        }
+        createButton
       )
     }
   }
+
   def update(pdf: PdfPane) = {
+    createButton.setOnAction(() => {
+      val childLIst = pdf.parentCombo.folder.getChildren
+      childLIst.remove(pdf)
+      if childLIst.size == 0 then
+        println("lmao")
+
+        pdf.parentCombo.folder.parentFolder.getChildren.remove(pdf.parentCombo)
+    })
+
     val pdfName = pdf.text.value
     val pdfSourceString = pdf.source.toString
     val pdfSource = getWinPath(pdfSourceString)
