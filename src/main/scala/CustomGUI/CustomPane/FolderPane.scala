@@ -5,8 +5,9 @@ import scalafx.scene.control.Label
 import scalafx.scene.layout.BorderPane
 import scalafx.scene.input.MouseEvent
 import scalafx.Includes.eventClosureWrapperWithZeroParam
+import scalafx.scene.layout.Pane
 
-class FolderPane extends FlowPane {
+case class FolderPane(parentFolder: Pane = null) extends FlowPane {
   styleClass += "folder-pane"
   prefWrapLength = 110 * 5
   vgap = 10
