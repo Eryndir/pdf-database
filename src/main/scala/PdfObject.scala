@@ -1,4 +1,4 @@
-case class pdfObject(
+case class PdfObject(
     name: String = "N/A",
     source: String = "N/A",
     driveLink: String = "N/A",
@@ -24,7 +24,7 @@ case class pdfObject(
         .map { case (header, info) =>
           s"$header: $info"
         }
-        .mkString(", ")
+        .mkString("\n")
       s"\n| $zippedSingle"
     }
 
@@ -33,7 +33,7 @@ case class pdfObject(
   override def toString =
     s"$name - $categoryName\n" +
       s"| $rpg\n" +
-      s"| $rpg\n" +
+      s"| $description\n" +
       s"| Source: $source\n" +
       s"| drivelink: $driveLink\n" +
       s"| Genre: $genre, Tags: ${tags.mkString(", ")}\n" +
@@ -44,6 +44,8 @@ case class pdfObject(
 
   def toStringSmall =
     s"$name - $categoryName\n"
+
+  def tagsInString = tags.mkString(", ")
 
 enum Category(
     val title: String,
