@@ -1,18 +1,18 @@
 case class PdfObject(
-    name: String = "N/A",
-    source: String = "N/A",
-    driveLink: String = "N/A",
-    genre: String = "N/A",
+    name: String = "N/A Name",
+    source: String = "N/A Source",
+    driveLink: String = "N/A driveLink",
+    genre: String = "N/A genre",
     tags: List[String] = List(),
     pageNumbers: Int = 0,
-    rating: String = "N/A",
+    rating: String = "N/A rating",
     read: Boolean = false,
     favourite: Boolean = false,
-    extraMaterial: String = "N/A",
+    extraMaterial: String = "N/A extraMaterial",
     category: Category = Category.Uncategorized,
     categoryInfo: List[String] = List(), // BUILDER PATTERN?
     rpg: String = "System Neutral",
-    description: String = "N/A"
+    description: String = "N/A description"
 ):
 
   def categorySpecifics: String =
@@ -45,7 +45,7 @@ case class PdfObject(
   def toStringSmall =
     s"$name - $categoryName\n"
 
-  def tagsInString = tags.mkString(", ")
+  def tagsInString = tags.mkString("\n")
 
 enum Category(
     val title: String,
