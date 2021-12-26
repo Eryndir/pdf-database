@@ -151,7 +151,7 @@ class CreationPane extends BorderPane {
               rating = comboList(7).text,
               extraMaterial = comboList(8).text,
               rpg = comboList(9).text,
-              tags = tagArea.text.value.split("\n").toList
+              tags = tagArea.text.value.split("\n").toList.map(x => x.trim)
             )
           )
           if folderChange then os.move.into(pdf.source, Path(pdfDest))

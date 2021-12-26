@@ -13,7 +13,7 @@ case class ComboText(lText: String) extends BorderPane {
   }
   val textfield = new TextField {
     alignmentInParent = Pos.Center
-    minWidth = 400
+    minWidth = 200
   }
   right = textfield
 

@@ -24,7 +24,6 @@ case class PdfPane(source: Path = os.pwd, parentCombo: ComboPane = null)
   onAction = () => {
     PanelHandler.panelState match {
       case CREATE => {
-        println("lmao")
         Platform.runLater(() -> {
           GUI.stage.getScene.cursor = Cursor.sfxCursor2jfx(Cursor.Wait)
         })
