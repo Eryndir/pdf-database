@@ -79,12 +79,37 @@ class DBHandler:
     val res = statement.executeQuery(s"SELECT * FROM pdfs Where name='$name'")
     res
 
-  def getAllFolders(): ResultSet =
+  def getSearchResult(query: SearchQuery): ResultSet =
     if con == null then getConnection
 
     println("getting Folders...")
-    val statement = con.createStatement
-    statement.executeQuery("select distinct source from pdfs")
+    val prep = con.prepareStatement(
+      "select source from pdfs where " +
+        "name like ? and genre like ? and tags like ? and " +
+        "pageNumbers > ? and rating like ? and " +
+        "read like ? and favourite like ? and " +
+        "category like ? and rpg like ?"
+    )
+    prep.setString(1, "%" + query.name + "%")
+    prep.setString(2, "%" + query.genre + "%")
+    prep.setString(3, "%" + query.tagsInString + "%")
+    prep.setInt(4, query.pageNumbers)
+    prep.setString(5, "%" + query.rating + "%")
+    if query.read._2 then {
+      prep.setString(6, query.read._1.toString)
+    } else {
+      prep.setString(6, "%")
+    }
+    if query.favourite._2 then {
+      prep.setString(7, query.favourite._1.toString)
+    } else {
+      prep.setString(7, "%")
+    }
+    prep.setString(8, "%" + query.genre + "%")
+    prep.setString(9, "%" + query.rpg + "%")
+    println(prep)
+
+    prep.executeQuery
 
   def displayEntries: ResultSet =
     if con == null then getConnection
@@ -101,13 +126,15 @@ class DBHandler:
       res.getString(2),
       res.getString(3),
       res.getString(4),
-      res.getString(5).split(",").toList,
+      res.getString(5).split("\n").toList,
       res.getInt(6),
       res.getString(7),
       res.getString(8).toBoolean,
       res.getString(9).toBoolean,
       res.getString(10),
-      Category.Uncategorized
+      Category.valueOf(res.getString(11)),
+      rpg = res.getString(12),
+      description = res.getString(13)
     )
     res.close
     pdf
@@ -129,7 +156,6 @@ class DBHandler:
     val searchRes = searchEntry(name)
     val pdf = getRow(searchRes)
     val pdfSource = s"'${pdf.source}'"
-    println(pdfSource)
     s"wslview $pdfSource" !
 
   def isInDB(path: Path): Boolean = {
@@ -161,7 +187,7 @@ class DBHandler:
         "UPDATE pdfs SET " +
           "name = ?, source = ?, driveLink = ?, genre = ?, " +
           "tags = ?, pageNumbers = ?, rating = ?," +
-          " read = ?, favourite = ?, extramaterial = ?, " +
+          "read = ?, favourite = ?, extramaterial = ?, " +
           "category = ?, rpg = ?, description = ? " +
           "WHERE source = ?"
       )

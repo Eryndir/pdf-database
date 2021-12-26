@@ -65,7 +65,8 @@ object GUI extends JFXApp3 {
                   onAction = (e: ActionEvent) =>
                     PanelHandler.panelState match
                       case CREATE => PanelHandler.leftCreate.refresh()
-                      case VIEW   => PanelHandler.centerView.refresh()
+                      case VIEW =>
+                        PanelHandler.centerView.refresh(new SearchQuery)
 
                 },
                 new MenuButton("settings") {

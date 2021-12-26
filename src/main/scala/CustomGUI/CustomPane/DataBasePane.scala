@@ -29,7 +29,7 @@ class DataBasePane extends BorderPane {
     content = tiles
   }
 
-  def refresh() = {
+  def refresh(query: SearchQuery) = {
     loading = true
     Platform.runLater(() -> {
       mainFolder = new FolderPane(tiles)
@@ -45,7 +45,7 @@ class DataBasePane extends BorderPane {
       allFolders = allFolders :+ main.folder
     })
 
-    folderPaneStructure(fileStructure)
+    folderPaneStructure(fileStructure(query))
     loading = false
 
     Platform.runLater(() -> {
@@ -103,8 +103,8 @@ class DataBasePane extends BorderPane {
 
   }
 
-  def fileStructure: (Set[String], List[String]) = {
-    val entry = dbHandler.getSearchResult()
+  def fileStructure(query: SearchQuery): (Set[String], List[String]) = {
+    val entry = dbHandler.getSearchResult(query)
     var folderPaths: Set[String] = Set()
     var entryPaths: List[String] = List()
 
