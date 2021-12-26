@@ -26,12 +26,12 @@ object GUI extends JFXApp3 {
       title = "GM-Database"
       x = 1920
       y = 680
-      height = 1000
+      height = 900
 
       maximized = true
 
       onCloseRequest_=(() => System.exit(0))
-      resizable = false
+
       scene = new Scene {
         stylesheets = List(getClass.getResource("styles.css").toExternalForm)
 
@@ -49,32 +49,23 @@ object GUI extends JFXApp3 {
           styleClass += "menuBar"
 
           children = Seq(
-            new RadioCustom {
-              text = "View"
-              selected = false
-              toggleGroup = tg
-            },
-            new RadioCustom {
-              text = "Create"
-              selected = true
-              toggleGroup = tg
-            },
+            new RadioCustom("View", tg, false),
+            new RadioCustom("Create", tg, true),
             new VBox {
               alignment = Pos.BottomCenter
               vgrow = Priority.Always
+
               children = Seq(
                 new Button {
                   text = "Refresh"
                   styleClass += "toggle-button"
                   minHeight = 50
                   minWidth = 100
-                  onAction = (e: ActionEvent) => {
-                    PanelHandler.panelState match {
+
+                  onAction = (e: ActionEvent) =>
+                    PanelHandler.panelState match
                       case CREATE => PanelHandler.leftCreate.refresh()
                       case VIEW   => PanelHandler.centerView.refresh()
-                    }
-
-                  }
 
                 },
                 new MenuButton("settings") {
