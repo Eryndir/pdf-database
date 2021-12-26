@@ -23,6 +23,7 @@ import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
 import scalafx.application.Platform
 import GUI._
+import scalafx.scene.control.Alert.AlertType
 
 class FilePane extends BorderPane {
   minWidth = (110 * 5) + 5
@@ -43,21 +44,31 @@ class FilePane extends BorderPane {
 
   def refresh() = {
     loading = true
-    mainFolder = new FolderPane(tiles)
-    currentFolder = mainFolder
-    allFolders = List()
+    Platform.runLater(() -> {
+      mainFolder = new FolderPane(tiles)
+      currentFolder = mainFolder
+      allFolders = List()
 
-    val main = new ComboPane("Main Folder", mainFolder, tiles) {
-      folder.visible = true
-      folder.managed = true
-    }
-    currentCombo = main
+      val main = new ComboPane("Main Folder", mainFolder, tiles) {
+        folder.visible = true
+        folder.managed = true
+      }
+      currentCombo = main
 
-    tiles.children = main
-    allFolders = allFolders :+ main.folder
+      tiles.children = main
+      allFolders = allFolders :+ main.folder
+    })
 
     folderPaneStructure(fileStructure(getNeedSortingPath()))
     loading = false
+
+    Platform.runLater(() -> {
+      new Alert(AlertType.Information) {
+        initOwner(stage)
+        title = "Refresh update"
+        headerText = "Refresh is Done"
+      }.showAndWait()
+    })
   }
 
   def folderPaneStructure(seq: IndexedSeq[(RelPath, Boolean, Path)]): Unit = {
@@ -83,7 +94,7 @@ class FilePane extends BorderPane {
 
             currentFolder = newFolder
           }
-        );
+        )
 
         folderPaneStructure(fileStructure(z))
       else

@@ -6,14 +6,18 @@ import GUI._
 import scalafx.application.Platform
 import os.Path
 import FilePathHandler._
+import scalafx.scene.control.Alert.AlertType
+import scalafx.geometry.Pos
 
 class DataBasePane extends BorderPane {
   minWidth = (110 * 5) + 5
-  maxWidth = (110 * 5) + 5
+  maxWidth = (110 * 7) + 5
   val tgFiles = new ToggleGroup
   var allFolders: List[Pane] = List()
 
-  val tiles = new FlowPane
+  val tiles = new FlowPane {
+    alignment = Pos.Center
+  }
   var mainFolder: FolderPane = null
 
   var currentFolder: FolderPane = null
@@ -27,21 +31,30 @@ class DataBasePane extends BorderPane {
 
   def refresh() = {
     loading = true
+    Platform.runLater(() -> {
+      mainFolder = new FolderPane(tiles)
+      currentFolder = mainFolder
+      allFolders = List()
+      val main = new ComboPane("D:\\Roleplaying games", mainFolder, tiles) {
+        folder.visible = true
+        folder.managed = true
+      }
+      currentCombo = main
 
-    mainFolder = new FolderPane(tiles)
-    currentFolder = mainFolder
-    allFolders = List()
-    val main = new ComboPane("D:\\Roleplaying games", mainFolder, tiles) {
-      folder.visible = true
-      folder.managed = true
-    }
-    currentCombo = main
+      tiles.children = main
+      allFolders = allFolders :+ main.folder
+    })
 
-    tiles.children = main
-    allFolders = allFolders :+ main.folder
-
-    loading = false
     folderPaneStructure(fileStructure)
+    loading = false
+
+    Platform.runLater(() -> {
+      new Alert(AlertType.Information) {
+        initOwner(stage)
+        title = "Refresh update"
+        headerText = "Refresh is Done"
+      }.showAndWait()
+    })
 
   }
 
@@ -53,6 +66,7 @@ class DataBasePane extends BorderPane {
     val root = "D:\\Roleplaying games"
     Platform.runLater(() -> {
       foldersSorted.foreach(x => {
+
         var parentFolder: Pane = tiles
         if x.equals(root) then parentFolder = mainFolder
         else {
@@ -90,7 +104,7 @@ class DataBasePane extends BorderPane {
   }
 
   def fileStructure: (Set[String], List[String]) = {
-    val entry = dbHandler.getAllFolders()
+    val entry = dbHandler.getSearchResult()
     var folderPaths: Set[String] = Set()
     var entryPaths: List[String] = List()
 
