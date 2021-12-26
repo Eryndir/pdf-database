@@ -19,10 +19,7 @@ object PanelHandler {
 
   val leftView = new SortingPane
   val centerView = new DataBasePane
-  val rightView = new ViewerPane {
-    style = " -fx-background-color: white;"
-    top = new Label("rightView")
-  }
+  val rightView = new ViewerPane {}
 
   val viewPane = new SplitPane {
     items ++= Seq(leftView, centerView, rightView)
@@ -32,14 +29,12 @@ object PanelHandler {
   def update(state: State): Unit = {
     state match {
       case CREATE => {
-        println("CREATE")
         panelState = CREATE
         viewPane.visible = false
 
         createPane.visible = true
       }
       case VIEW => {
-        println("VIEW")
         panelState = VIEW
 
         viewPane.visible = true

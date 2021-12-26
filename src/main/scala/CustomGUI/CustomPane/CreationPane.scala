@@ -48,7 +48,9 @@ class CreationPane extends BorderPane {
     visible = false
   }
 
-  val comboBox = new ComboBox(Category.values.toIndexedSeq)
+  val comboBox = new ComboBox(Category.values.toIndexedSeq) {
+    minWidth = 400
+  }
   comboBox.getSelectionModel.selectLast
 
   val tagArea = new TextArea {
@@ -56,7 +58,7 @@ class CreationPane extends BorderPane {
   }
 
   left = new FlowPane {
-    prefWrapLength = 110
+    //prefWrapLength = 110
     comboList = List(
       new ComboText("Name"),
       new ComboText("Description"),
@@ -90,7 +92,7 @@ class CreationPane extends BorderPane {
     )
     children = comboList
 
-    style = "-fx-border-color: rgb(150, 150, 150)"
+    //style = "-fx-border-color: rgb(150, 150, 150)"
   }
 
   right = new BorderPane {

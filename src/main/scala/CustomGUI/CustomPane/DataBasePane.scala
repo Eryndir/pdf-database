@@ -106,7 +106,7 @@ class DataBasePane extends BorderPane {
   def getParentFolder(parentId: String): Pane = {
     val optionList = allFolders.filter(p => p.getId.equals(parentId))
     val newParentId = parentId.substring(0, parentId.lastIndexOf("\\"))
-    println(newParentId)
+
     if optionList.size == 0 then getParentFolder(newParentId)
     else optionList.head
   }

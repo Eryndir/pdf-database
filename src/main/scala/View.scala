@@ -24,8 +24,9 @@ object GUI extends JFXApp3 {
 
     stage = new JFXApp3.PrimaryStage {
       title = "GM-Database"
-      x = 1950
-      y = 750
+      x = 1920
+      y = 680
+      height = 1000
 
       maximized = true
 
