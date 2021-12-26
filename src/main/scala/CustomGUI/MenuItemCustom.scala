@@ -17,7 +17,7 @@ class MenuItemCustom(name: String, stage: PrimaryStage) extends MenuItem {
   onAction = () => {
     val directoryChooser = new DirectoryChooser {
       title = s"Choose $name Directory"
-      initialDirectory = new java.io.File("/mnt/d/")
+      initialDirectory = new java.io.File("/mnt/d/Roleplaying games/")
     }
     val selectedFolder =
       directoryChooser.showDialog(stage).toString
