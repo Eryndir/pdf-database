@@ -14,25 +14,32 @@ import net.coobird.thumbnailator.Thumbnails
 import scalafx.scene.control.Button
 import GUI._
 import scalafx.application.Platform
+import scalafx.scene.control.ComboBox
+import scalafx.scene.control.CheckBox
+import scalafx.scene.control.TextArea
+import scalafx.scene.control.TextField
 
 class ViewerPane extends BorderPane {
   padding = new javafx.geometry.Insets(10, 10, 10, 10)
-  val pdfWindow = new ImageView
+  val pdfWindow = new ImageView {
+    alignmentInParent = Pos.Center
+  }
   var localPdf = null
 
-  center = pdfWindow
+  top = pdfWindow
 
   val openButton = new Button("OPEN")
+  val updateButton = new Button("UPDATE")
 
-  bottom = new FlowPane {
-    children = Seq(new ComboText("lmao"), openButton)
-  }
+  val pdfAttributesPane = new PdfAttributesPane(openButton, updateButton)
+  bottom = pdfAttributesPane
 
   def update(pdf: PdfPane) = {
     val pdfName = pdf.text.value
 
     val pdfSourceString = pdf.source.toString
     val pdfSource = getWinPath(pdfSourceString)
+    pdfAttributesPane.update(pdfSource)
 
     openButton.setOnAction(() => {
       dbHandler.openFile(pdfName)
@@ -47,7 +54,69 @@ class ViewerPane extends BorderPane {
       pdf.close()
     })
   }
+
   def resizeImage(image: BufferedImage): BufferedImage = {
     Thumbnails.of(image).size(620, 440).asBufferedImage
+  }
+}
+
+class PdfAttributesPane(openButton: Button, updateButton: Button)
+    extends FlowPane {
+  val comboBox = new ComboBox(Category.values.toIndexedSeq) {
+    minWidth = 300
+  }
+  val attributePaneSeq = Seq(
+    new AttributePane,
+    new AttributePane,
+    new AttributePane,
+    new AttributePane {
+      center = comboBox
+    },
+    new AttributePane {
+      textField.setEditable(false)
+    },
+    new AttributePane {
+      textField.setEditable(false)
+    },
+    new AttributePane,
+    new AttributePane,
+    new AttributePane,
+    new AttributePane,
+    new AttributePane {
+      center = new TextArea {
+        alignment = Pos.Center
+        maxWidth = 170
+      }
+    }
+  )
+  children = attributePaneSeq
+  children ++= Seq(openButton, updateButton)
+
+  def update(pdfSource: String) = {
+    val pdf = dbHandler.getFromSource(pdfSource)
+    updateButton.setOnAction(() => {})
+    attributePaneSeq(0).update(pdf.name)
+    attributePaneSeq(1).update(pdf.description)
+    attributePaneSeq(2).update(pdf.genre)
+    comboBox.getSelectionModel.select(pdf.category)
+    attributePaneSeq(4).update(pdf.source)
+    attributePaneSeq(5).update(pdf.driveLink)
+    attributePaneSeq(6).update(pdf.pageNumbers.toString)
+    attributePaneSeq(7).update(pdf.rating)
+    attributePaneSeq(8).update(pdf.extraMaterial)
+    attributePaneSeq(9).update(pdf.rpg)
+    attributePaneSeq(10).update(pdf.tags.toString)
+  }
+}
+
+class AttributePane extends BorderPane {
+  padding = new javafx.geometry.Insets(10, 10, 10, 10)
+  val textField = new TextField {
+    minWidth = 300
+  }
+  center = textField
+
+  def update(newText: String) = {
+    textField.text = newText
   }
 }
