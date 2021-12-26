@@ -68,25 +68,27 @@ class PdfAttributesPane(openButton: Button, updateButton: Button)
   val textArea = new TextArea {
     alignment = Pos.Center
     maxWidth = 170
+    maxHeight = 100
   }
+
   val attributePaneSeq = Seq(
-    new AttributePane,
-    new AttributePane,
-    new AttributePane,
-    new AttributePane {
+    new AttributePane("Name"),
+    new AttributePane("Description"),
+    new AttributePane("Genre"),
+    new AttributePane("Category") {
       center = comboBox
     },
-    new AttributePane {
+    new AttributePane("Source") {
       textField.setEditable(false)
     },
-    new AttributePane {
+    new AttributePane("Drive Link") {
       textField.setEditable(false)
     },
-    new AttributePane,
-    new AttributePane,
-    new AttributePane,
-    new AttributePane,
-    new AttributePane {
+    new AttributePane("Page Numbers"),
+    new AttributePane("Rating"),
+    new AttributePane("Extra Material:"),
+    new AttributePane("RPG"),
+    new AttributePane("Tags") {
       center = textArea
     }
   )
@@ -126,24 +128,7 @@ class PdfAttributesPane(openButton: Button, updateButton: Button)
           rpg = attributePaneSeq(9).value,
           description = attributePaneSeq(1).value
         )
-      println(updatedPdf)
       dbHandler.update(updatedPdf)
     })
-  }
-}
-
-class AttributePane extends BorderPane {
-  padding = new javafx.geometry.Insets(10, 10, 10, 10)
-  val textField = new TextField {
-    minWidth = 300
-  }
-  center = textField
-
-  def update(newText: String) = {
-    textField.text = newText
-  }
-
-  def value: String = {
-    textField.text.value
   }
 }
