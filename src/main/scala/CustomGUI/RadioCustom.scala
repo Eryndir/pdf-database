@@ -13,11 +13,16 @@ import scala.sys.process._
 import scala.language.postfixOps
 import State._
 
-class RadioCustom extends RadioButton {
+class RadioCustom(bText: String, tg: ToggleGroup, bSelect: Boolean)
+    extends RadioButton {
   styleClass -= "radio-button"
   styleClass += "toggle-button"
   minHeight = 50
   minWidth = 100
+
+  text = bText
+  toggleGroup = tg
+  selected = bSelect
 
   onAction = () => {
     text.value match {
