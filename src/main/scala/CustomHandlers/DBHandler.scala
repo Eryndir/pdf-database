@@ -44,7 +44,7 @@ class DBHandler:
             "description varchar(60))"
         )
 
-  def addEntry(pdf: pdfObject): Unit =
+  def addEntry(pdf: PdfObject) =
     if con == null then getConnection
 
     val prep =
@@ -59,7 +59,7 @@ class DBHandler:
     prep.setString(2, pdf.source)
     prep.setString(3, pdf.driveLink)
     prep.setString(4, pdf.genre)
-    prep.setString(5, pdf.tags.toString)
+    prep.setString(5, pdf.tagsInString)
     prep.setInt(6, pdf.pageNumbers)
     prep.setString(7, pdf.rating)
     prep.setString(8, pdf.read.toString)
@@ -93,10 +93,10 @@ class DBHandler:
     val res = statement.executeQuery("SELECT * FROM pdfs")
     res
 
-  def getRow(res: ResultSet): pdfObject =
+  def getRow(res: ResultSet): PdfObject =
     if con == null then getConnection
 
-    val pdf = new pdfObject(
+    val pdf = new PdfObject(
       res.getString(1),
       res.getString(2),
       res.getString(3),
@@ -143,7 +143,7 @@ class DBHandler:
     res.next
   }
 
-  def getFromSource(path: String): pdfObject = {
+  def getFromSource(path: String): PdfObject = {
     if con == null then getConnection
     val prep = con.prepareStatement(
       s"select * from pdfs where source = ?"
@@ -151,4 +151,34 @@ class DBHandler:
     prep.setString(1, path)
     val res = prep.executeQuery
     getRow(res)
+  }
+
+  def update(pdf: PdfObject) = {
+    if con == null then getConnection
+
+    val prep =
+      con.prepareStatement(
+        "UPDATE pdfs SET " +
+          "name = ?, source = ?, driveLink = ?, genre = ?, " +
+          "tags = ?, pageNumbers = ?, rating = ?," +
+          " read = ?, favourite = ?, extramaterial = ?, " +
+          "category = ?, rpg = ?, description = ? " +
+          "WHERE source = ?"
+      )
+    prep.setString(1, pdf.name)
+    prep.setString(2, pdf.source)
+    prep.setString(3, pdf.driveLink)
+    prep.setString(4, pdf.genre)
+    prep.setString(5, pdf.tagsInString)
+    prep.setInt(6, pdf.pageNumbers)
+    prep.setString(7, pdf.rating)
+    prep.setString(8, pdf.read.toString)
+    prep.setString(9, pdf.favourite.toString)
+    prep.setString(10, pdf.extraMaterial)
+    prep.setString(11, pdf.category.title)
+    prep.setString(12, pdf.rpg)
+    prep.setString(13, pdf.description)
+    prep.setString(14, pdf.source)
+
+    prep.execute
   }

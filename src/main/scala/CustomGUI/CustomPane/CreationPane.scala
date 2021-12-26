@@ -140,7 +140,7 @@ class CreationPane extends BorderPane {
         GUI.pool.execute(() => {
 
           dbHandler.addEntry(
-            new pdfObject(
+            new PdfObject(
               name = comboList(0).text,
               description = comboList(1).text,
               category = comboBox.value.value,

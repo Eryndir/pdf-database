@@ -65,6 +65,10 @@ class PdfAttributesPane(openButton: Button, updateButton: Button)
   val comboBox = new ComboBox(Category.values.toIndexedSeq) {
     minWidth = 300
   }
+  val textArea = new TextArea {
+    alignment = Pos.Center
+    maxWidth = 170
+  }
   val attributePaneSeq = Seq(
     new AttributePane,
     new AttributePane,
@@ -83,10 +87,7 @@ class PdfAttributesPane(openButton: Button, updateButton: Button)
     new AttributePane,
     new AttributePane,
     new AttributePane {
-      center = new TextArea {
-        alignment = Pos.Center
-        maxWidth = 170
-      }
+      center = textArea
     }
   )
   children = attributePaneSeq
@@ -94,7 +95,7 @@ class PdfAttributesPane(openButton: Button, updateButton: Button)
 
   def update(pdfSource: String) = {
     val pdf = dbHandler.getFromSource(pdfSource)
-    updateButton.setOnAction(() => {})
+
     attributePaneSeq(0).update(pdf.name)
     attributePaneSeq(1).update(pdf.description)
     attributePaneSeq(2).update(pdf.genre)
@@ -105,7 +106,29 @@ class PdfAttributesPane(openButton: Button, updateButton: Button)
     attributePaneSeq(7).update(pdf.rating)
     attributePaneSeq(8).update(pdf.extraMaterial)
     attributePaneSeq(9).update(pdf.rpg)
-    attributePaneSeq(10).update(pdf.tags.toString)
+    textArea.text = pdf.tagsInString
+
+    updateButton.setOnAction(() => {
+      println(attributePaneSeq(10).value)
+      val updatedPdf =
+        new PdfObject(
+          attributePaneSeq(0).value,
+          attributePaneSeq(4).value,
+          attributePaneSeq(5).value,
+          attributePaneSeq(2).value,
+          textArea.text.value.split("\n").toList,
+          attributePaneSeq(6).value.toInt,
+          attributePaneSeq(7).value,
+          false,
+          false,
+          attributePaneSeq(8).value,
+          comboBox.getSelectionModel.getSelectedItem,
+          rpg = attributePaneSeq(9).value,
+          description = attributePaneSeq(1).value
+        )
+      println(updatedPdf)
+      dbHandler.update(updatedPdf)
+    })
   }
 }
 
@@ -118,5 +141,9 @@ class AttributePane extends BorderPane {
 
   def update(newText: String) = {
     textField.text = newText
+  }
+
+  def value: String = {
+    textField.text.value
   }
 }

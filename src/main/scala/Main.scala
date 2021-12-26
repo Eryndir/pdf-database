@@ -24,9 +24,9 @@ def testDiveHandler: Unit =
 def consoleReader: String =
   io.StdIn.readLine().toString()
 
-def pdfCreation(driveHandler: DriveHandler): pdfObject =
+def pdfCreation(driveHandler: DriveHandler): PdfObject =
   val pdfName = "DM Yourself"
-  val pdf = new pdfObject(
+  val pdf = new PdfObject(
     name = pdfName,
     source = s"D:/Roleplaying games/_D&D/3rd Party/Adventures - Solo/$pdfName",
     driveLink = driveHandler.getFileLink(pdfName)
