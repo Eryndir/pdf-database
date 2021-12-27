@@ -4,9 +4,9 @@ case class SearchQuery(
     tags: List[String] = List(),
     pageNumbers: Int = 0,
     rating: String = "",
-    read: (Boolean, Boolean) = (false, false),
-    favourite: (Boolean, Boolean) = (false, false),
-    category: (Category, Boolean) = (Category.Uncategorized, false),
+    read: Boolean = false,
+    favourite: Boolean = false,
+    category: Category = Category.Uncategorized,
     rpg: String = ""
 ):
   def tagsInString = tags.mkString("\n")

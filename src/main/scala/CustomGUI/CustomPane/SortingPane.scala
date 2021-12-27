@@ -18,9 +18,12 @@ class SortingPane extends FlowPane {
   }
   comboBox.getSelectionModel.selectLast
 
-  val textArea = new TextArea {
+  val tagArea = new TextArea {
     maxWidth = 300
   }
+
+  val favCheck = new CheckBox
+  val readCheck = new CheckBox
 
   val attributePaneSeq = Seq(
     new AttributePane("Name"),
@@ -28,12 +31,23 @@ class SortingPane extends FlowPane {
     new AttributePane("Category") {
       center = comboBox
     },
-    new AttributePane("Page Numbers"),
-    new AttributePane("Rating"),
-    new AttributePane("Extra Material:"),
+    new AttributePane("Page Numbers") {
+      textField.minWidth = 100
+      textField.maxWidth = 100
+    },
+    new AttributePane("Rating") {
+      textField.minWidth = 100
+      textField.maxWidth = 100
+    },
     new AttributePane("RPG"),
+    new AttributePane("Read") {
+      center = readCheck
+    },
+    new AttributePane("Favourite") {
+      center = favCheck
+    },
     new AttributePane("Tags") {
-      center = textArea
+      center = tagArea
     }
   )
 
@@ -41,10 +55,21 @@ class SortingPane extends FlowPane {
   children ++= Seq(
     new Button("Search") {
       onAction = () => {
+        println("oof")
+        println(readCheck.isSelected)
+        println("lmao")
+        val pgNumAttr = attributePaneSeq(3).value
         PanelHandler.centerView.refresh(
           new SearchQuery(
             attributePaneSeq(0).value,
-            attributePaneSeq(1).value
+            attributePaneSeq(1).value,
+            tagArea.text.value.split("\n").toList.map(x => x.trim),
+            if (pgNumAttr.equals("")) 0 else pgNumAttr.toInt,
+            attributePaneSeq(4).value,
+            readCheck.isSelected,
+            favCheck.isSelected,
+            comboBox.value.value,
+            attributePaneSeq(5).value
           )
         )
       }

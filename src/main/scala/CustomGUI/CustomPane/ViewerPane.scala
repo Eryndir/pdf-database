@@ -65,18 +65,28 @@ class PdfAttributesPane(openButton: Button, updateButton: Button)
   val comboBox = new ComboBox(Category.values.toIndexedSeq) {
     minWidth = 300
   }
-  val textArea = new TextArea {
+  val tagArea = new TextArea {
     alignment = Pos.Center
     maxWidth = 170
     maxHeight = 100
   }
 
+  val readCheck = new CheckBox
+  val favCheck = new CheckBox
+
   val attributePaneSeq = Seq(
     new AttributePane("Name"),
     new AttributePane("Description"),
     new AttributePane("Genre"),
+    new AttributePane("RPG"),
     new AttributePane("Category") {
       center = comboBox
+    },
+    new AttributePane("Read") {
+      center = readCheck
+    },
+    new AttributePane("Favourite") {
+      center = favCheck
     },
     new AttributePane("Source") {
       textField.setEditable(false)
@@ -87,9 +97,8 @@ class PdfAttributesPane(openButton: Button, updateButton: Button)
     new AttributePane("Page Numbers"),
     new AttributePane("Rating"),
     new AttributePane("Extra Material:"),
-    new AttributePane("RPG"),
     new AttributePane("Tags") {
-      center = textArea
+      center = tagArea
     }
   )
   children = attributePaneSeq
@@ -101,32 +110,33 @@ class PdfAttributesPane(openButton: Button, updateButton: Button)
     attributePaneSeq(0).update(pdf.name)
     attributePaneSeq(1).update(pdf.description)
     attributePaneSeq(2).update(pdf.genre)
+    attributePaneSeq(3).update(pdf.rpg)
     comboBox.getSelectionModel.select(pdf.category)
-    attributePaneSeq(4).update(pdf.source)
-    attributePaneSeq(5).update(pdf.driveLink)
-    attributePaneSeq(6).update(pdf.pageNumbers.toString)
-    attributePaneSeq(7).update(pdf.rating)
-    attributePaneSeq(8).update(pdf.extraMaterial)
-    attributePaneSeq(9).update(pdf.rpg)
-    textArea.text = pdf.tagsInString
+    readCheck.selected = pdf.read
+    favCheck.selected = pdf.favourite
+    attributePaneSeq(7).update(pdf.source)
+    attributePaneSeq(8).update(pdf.driveLink)
+    attributePaneSeq(9).update(pdf.pageNumbers.toString)
+    attributePaneSeq(10).update(pdf.rating)
+    attributePaneSeq(11).update(pdf.extraMaterial)
+    tagArea.text = pdf.tagsInString
 
     updateButton.setOnAction(() => {
-      println(attributePaneSeq(10).value)
       val updatedPdf =
         new PdfObject(
-          attributePaneSeq(0).value,
-          attributePaneSeq(4).value,
-          attributePaneSeq(5).value,
-          attributePaneSeq(2).value,
-          textArea.text.value.split("\n").toList,
-          attributePaneSeq(6).value.toInt,
-          attributePaneSeq(7).value,
-          false,
-          false,
-          attributePaneSeq(8).value,
-          comboBox.getSelectionModel.getSelectedItem,
-          rpg = attributePaneSeq(9).value,
-          description = attributePaneSeq(1).value
+          name = attributePaneSeq(0).value,
+          description = attributePaneSeq(1).value,
+          genre = attributePaneSeq(2).value,
+          rpg = attributePaneSeq(3).value,
+          category = comboBox.value.value,
+          read = readCheck.isSelected,
+          favourite = favCheck.isSelected,
+          source = attributePaneSeq(7).value,
+          driveLink = attributePaneSeq(8).value,
+          pageNumbers = attributePaneSeq(9).value.toInt,
+          rating = attributePaneSeq(10).value,
+          extraMaterial = attributePaneSeq(11).value,
+          tags = tagArea.text.value.split("\n").toList.map(x => x.trim)
         )
       dbHandler.update(updatedPdf)
     })

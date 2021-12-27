@@ -81,6 +81,7 @@ class DBHandler:
 
   def getSearchResult(query: SearchQuery): ResultSet =
     if con == null then getConnection
+    println(query)
 
     println("getting Folders...")
     val prep = con.prepareStatement(
@@ -95,17 +96,17 @@ class DBHandler:
     prep.setString(3, "%" + query.tagsInString + "%")
     prep.setInt(4, query.pageNumbers)
     prep.setString(5, "%" + query.rating + "%")
-    if query.read._2 then {
-      prep.setString(6, query.read._1.toString)
+    if query.read then {
+      prep.setString(6, query.read.toString)
     } else {
       prep.setString(6, "%")
     }
-    if query.favourite._2 then {
-      prep.setString(7, query.favourite._1.toString)
+    if query.favourite then {
+      prep.setString(7, query.favourite.toString)
     } else {
       prep.setString(7, "%")
     }
-    prep.setString(8, "%" + query.genre + "%")
+    prep.setString(8, "%" + "%")
     prep.setString(9, "%" + query.rpg + "%")
     println(prep)
 

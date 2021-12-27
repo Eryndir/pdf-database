@@ -57,6 +57,9 @@ class CreationPane extends BorderPane {
     maxWidth = 170
   }
 
+  val readCheck = new CheckBox
+  val favCheck = new CheckBox
+
   left = new FlowPane {
     //prefWrapLength = 110
     comboList = List(
@@ -66,28 +69,34 @@ class CreationPane extends BorderPane {
         right = comboBox
       },
       new ComboText("Source"),
-      new ComboText("driveLink") {
+      new ComboText("Drive Link") {
         center = new CheckBox {
           onAction = () => {
             driveSearch = !driveSearch
           }
         }
       },
-      new ComboText("genre"),
-      new ComboText("pageNumbers"),
-      new ComboText("rating"),
-      new ComboText("extraMaterial") {
+      new ComboText("Genre"),
+      new ComboText("Page Numbers"),
+      new ComboText("Rating"),
+      new ComboText("Extra Material") {
         center = new Button("CLEAR") {
           onAction = () => {
             textfield.clear
           }
         }
       },
-      new ComboText("rpg"),
-      new ComboText("tags") {
+      new ComboText("RPG"),
+      new ComboText("Tags") {
 
         right = tagArea
 
+      },
+      new ComboText("Read") {
+        right = readCheck
+      },
+      new ComboText("Favourite") {
+        right = favCheck
       }
     )
     children = comboList
@@ -151,7 +160,9 @@ class CreationPane extends BorderPane {
               rating = comboList(7).text,
               extraMaterial = comboList(8).text,
               rpg = comboList(9).text,
-              tags = tagArea.text.value.split("\n").toList.map(x => x.trim)
+              tags = tagArea.text.value.split("\n").toList.map(x => x.trim),
+              read = readCheck.isSelected,
+              favourite = favCheck.isSelected
             )
           )
           if folderChange then os.move.into(pdf.source, Path(pdfDest))
