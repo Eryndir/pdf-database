@@ -106,7 +106,11 @@ class DBHandler:
     } else {
       prep.setString(7, "%")
     }
-    prep.setString(8, "%" + "%")
+    val tmp =
+      if query.category == Category.Uncategorized then ""
+      else query.category.title
+    println(tmp)
+    prep.setString(8, "%" + tmp + "%")
     prep.setString(9, "%" + query.rpg + "%")
     println(prep)
 

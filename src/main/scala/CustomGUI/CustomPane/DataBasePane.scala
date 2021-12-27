@@ -75,7 +75,10 @@ class DataBasePane extends BorderPane {
         }
 
         val newFolder = new FolderPane(parentFolder)
-        val newCombo = new ComboPane(x, newFolder, tiles)
+        val newCombo = new ComboPane(x, newFolder, tiles) {
+          folder.visible = true
+          folder.managed = true
+        }
         currentCombo = newCombo
         parentFolder.children += newCombo
         allFolders = allFolders :+ newCombo.folder

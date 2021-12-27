@@ -11,19 +11,19 @@ case class ComboText(lText: String) extends BorderPane {
   left = new Label(lText) {
     alignmentInParent = Pos.Center
   }
-  val textfield = new TextField {
+  val textField = new TextField {
     alignmentInParent = Pos.Center
-    minWidth = 200
+    minWidth = 300
   }
-  right = textfield
+  right = textField
 
   def update(value: String) = {
-    textfield.text = value
+    textField.text = value
   }
   def clear() = {
-    textfield.clear
+    textField.clear
   }
   def text = {
-    textfield.text.value
+    textField.text.value
   }
 }

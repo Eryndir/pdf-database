@@ -82,7 +82,7 @@ class CreationPane extends BorderPane {
       new ComboText("Extra Material") {
         center = new Button("CLEAR") {
           onAction = () => {
-            textfield.clear
+            textField.clear
           }
         }
       },

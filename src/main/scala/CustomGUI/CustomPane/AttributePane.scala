@@ -35,4 +35,8 @@ class AttributePane(lText: String) extends BorderPane {
   def value: String = {
     textField.text.value
   }
+
+  def clear() = {
+    textField.clear
+  }
 }
