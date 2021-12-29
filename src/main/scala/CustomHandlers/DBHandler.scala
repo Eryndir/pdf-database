@@ -81,7 +81,6 @@ class DBHandler:
 
   def getSearchResult(query: SearchQuery): ResultSet =
     if con == null then getConnection
-    println(query)
 
     println("getting Folders...")
     val prep = con.prepareStatement(
@@ -109,10 +108,8 @@ class DBHandler:
     val tmp =
       if query.category == Category.Uncategorized then ""
       else query.category.title
-    println(tmp)
     prep.setString(8, "%" + tmp + "%")
     prep.setString(9, "%" + query.rpg + "%")
-    println(prep)
 
     prep.executeQuery
 
@@ -125,13 +122,14 @@ class DBHandler:
 
   def getRow(res: ResultSet): PdfObject =
     if con == null then getConnection
-
+    val tagList = (new TagList)
+    tagList.addList(res.getString(5).split("\n").toList)
     val pdf = new PdfObject(
       res.getString(1),
       res.getString(2),
       res.getString(3),
       res.getString(4),
-      res.getString(5).split("\n").toList,
+      tagList,
       res.getInt(6),
       res.getString(7),
       res.getString(8).toBoolean,
@@ -143,17 +141,6 @@ class DBHandler:
     )
     res.close
     pdf
-
-  def emptyTable: Unit =
-    if con == null then getConnection
-    //println("Are you sure about emptying the table?")
-    //val input = io.StdIn.readLine().toString().toLowerCase
-    val input = "yes"
-    if (input.equals("yes")) {
-      val statement = con.prepareStatement("delete from pdfs")
-      statement.execute
-      statement.close
-    }
 
   def openFile(name: String): Unit =
     if con == null then getConnection
@@ -212,4 +199,23 @@ class DBHandler:
     prep.setString(14, pdf.source)
 
     prep.execute
+  }
+
+  def addTag(tag: String) = {
+    if con == null then getConnection
+
+    val prep = con.prepareStatement("insert into tags (tag) values(?)")
+    prep.setString(1, tag)
+    prep.execute
+  }
+
+  def getTagList: List[String] = {
+    if con == null then getConnection
+    val prep = con.prepareStatement("select tag from tags")
+    val res = prep.executeQuery
+    var list: List[String] = List()
+
+    while res.next do list = list :+ res.getString(1)
+
+    list
   }

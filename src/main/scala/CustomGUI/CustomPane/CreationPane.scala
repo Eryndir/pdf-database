@@ -49,13 +49,11 @@ class CreationPane extends BorderPane {
   }
 
   val comboBox = new ComboBox(Category.values.toIndexedSeq) {
-    minWidth = 400
+    minWidth = 300
   }
   comboBox.getSelectionModel.selectLast
 
-  val tagArea = new TextArea {
-    maxWidth = 170
-  }
+  val tagArea = new TagArea
 
   val readCheck = new CheckBox
   val favCheck = new CheckBox
@@ -147,7 +145,10 @@ class CreationPane extends BorderPane {
         val childList = pdf.parentCombo.folder.getChildren
         childList.remove(pdf)
         GUI.pool.execute(() => {
-
+          val tagList = new TagList
+          tagList.addList(
+            tagArea.getTags
+          )
           dbHandler.addEntry(
             new PdfObject(
               name = comboList(0).text,
@@ -160,7 +161,7 @@ class CreationPane extends BorderPane {
               rating = comboList(7).text,
               extraMaterial = comboList(8).text,
               rpg = comboList(9).text,
-              tags = tagArea.text.value.split("\n").toList.map(x => x.trim),
+              tags = tagList,
               read = readCheck.isSelected,
               favourite = favCheck.isSelected
             )

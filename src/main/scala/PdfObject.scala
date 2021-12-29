@@ -3,7 +3,7 @@ case class PdfObject(
     source: String = "N/A Source",
     driveLink: String = "N/A driveLink",
     genre: String = "N/A genre",
-    tags: List[String] = List(),
+    tags: TagList = new TagList,
     pageNumbers: Int = 0,
     rating: String = "N/A rating",
     read: Boolean = false,
@@ -36,7 +36,7 @@ case class PdfObject(
       s"| $description\n" +
       s"| Source: $source\n" +
       s"| drivelink: $driveLink\n" +
-      s"| Genre: $genre, Tags: ${tags.mkString(", ")}\n" +
+      s"| Genre: $genre, Tags: ${tags.pQueue.mkString(", ")}\n" +
       s"| Pages: $pageNumbers, Rating: $rating\n" +
       s"| Read: $read, Favourite: $favourite\n" +
       s"| Extra material: $extraMaterial" +
@@ -45,7 +45,7 @@ case class PdfObject(
   def toStringSmall =
     s"$name - $categoryName\n"
 
-  def tagsInString = tags.mkString("\n")
+  def tagsInString = tags.pQueue.mkString("\n")
 
 enum Category(
     val title: String,

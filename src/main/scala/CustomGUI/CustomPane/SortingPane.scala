@@ -19,7 +19,7 @@ class SortingPane extends FlowPane {
   }
   comboBox.getSelectionModel.selectLast
 
-  val tagArea = new TextArea {
+  val tagArea = new TagArea {
     maxWidth = 300
   }
 
@@ -54,40 +54,37 @@ class SortingPane extends FlowPane {
 
   children = attributePaneSeq
 
-  children += new HBox {
+  children += new BorderPane {
     padding = new javafx.geometry.Insets(10, 10, 10, 10)
-    children = Seq(
-      new Button("Search") {
-        onAction = () => {
-          println("oof")
-          println(readCheck.isSelected)
-          println("lmao")
-          val pgNumAttr = attributePaneSeq(3).value
-          PanelHandler.centerView.refresh(
-            new SearchQuery(
-              attributePaneSeq(0).value,
-              attributePaneSeq(1).value,
-              tagArea.text.value.split("\n").toList.map(x => x.trim),
-              if (pgNumAttr.equals("")) 0 else pgNumAttr.toInt,
-              attributePaneSeq(4).value,
-              readCheck.isSelected,
-              favCheck.isSelected,
-              comboBox.value.value,
-              attributePaneSeq(5).value
-            )
+    alignment = Pos.TopCenter
+    left = new Button("Search") {
+      onAction = () => {
+        val pgNumAttr = attributePaneSeq(3).value
+        PanelHandler.centerView.refresh(
+          new SearchQuery(
+            attributePaneSeq(0).value,
+            attributePaneSeq(1).value,
+            tagArea.getTags,
+            if (pgNumAttr.equals("")) 0 else pgNumAttr.toInt,
+            attributePaneSeq(4).value,
+            readCheck.isSelected,
+            favCheck.isSelected,
+            comboBox.value.value,
+            attributePaneSeq(5).value
           )
-        }
-      },
-      new Button("Clear") {
-        onAction = () => {
-          attributePaneSeq.map(x => x.clear())
-          readCheck.selected = false
-          favCheck.selected = false
-          comboBox.getSelectionModel.selectLast
-          tagArea.clear
-        }
+        )
       }
-    )
+    }
+
+    right = new Button("Clear") {
+      onAction = () => {
+        attributePaneSeq.map(x => x.clear())
+        readCheck.selected = false
+        favCheck.selected = false
+        comboBox.getSelectionModel.selectLast
+        tagArea.clear
+      }
+    }
 
   }
 }
