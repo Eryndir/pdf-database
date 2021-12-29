@@ -69,10 +69,7 @@ class DataBasePane extends BorderPane {
 
         var parentFolder: Pane = tiles
         if x.equals(root) then parentFolder = mainFolder
-        else {
-
-          parentFolder = getParentFolder(x)
-        }
+        else parentFolder = getParentFolder(x)
 
         val newFolder = new FolderPane(parentFolder)
         val newCombo = new ComboPane(x, newFolder, tiles) {

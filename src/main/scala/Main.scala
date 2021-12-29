@@ -12,7 +12,6 @@ def testDiveHandler: Unit =
   val dbHandler = new DBHandler
   val entry = pdfCreation(driveHandler)
 
-  dbHandler.emptyTable
   dbHandler.addEntry(entry)
   val res = dbHandler.displayEntries
 

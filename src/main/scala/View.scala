@@ -26,7 +26,7 @@ object GUI extends JFXApp3 {
       title = "GM-Database"
       x = 1920
       y = 680
-      height = 900
+      height = 1000
 
       maximized = true
 
@@ -72,6 +72,7 @@ object GUI extends JFXApp3 {
                 new MenuButton("settings") {
                   styleClass += "toggle-button"
                   minWidth = 100
+                  popupSide = Side.Top
 
                   items = Seq(
                     new MenuItemCustom("Main", stage),
