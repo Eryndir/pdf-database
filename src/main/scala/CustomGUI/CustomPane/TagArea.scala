@@ -80,10 +80,21 @@ class TagArea extends BorderPane {
   }
 
   def getTags: List[String] = {
-    text.split("\n").toList.map(x => x.trim)
+    obsSelcTags.toList
   }
 
-  def setTags(tList: String) = {}
+  def setTags(tList: String) = {
+    val trueList = tList.split("\n").toList.map(x => x.trim)
+    obsSelcTags.addAll(trueList)
+  }
 
-  def clear = {}
+  def clear = {
+    obsSelcTags.clear
+  }
+
+  def update(tList: String) = {
+    obsSelcTags.remove(0, obsSelcTags.size)
+    println("lmao")
+    setTags(tList)
+  }
 }

@@ -91,7 +91,7 @@ class PdfAttributesPane(openButton: Button, updateButton: Button)
     attributePaneSeq(9).update(pdf.pageNumbers.toString)
     attributePaneSeq(10).update(pdf.rating)
     attributePaneSeq(11).update(pdf.extraMaterial)
-    tagArea.setTags(pdf.tagsInString)
+    tagArea.update(pdf.tagsInString)
 
     updateButton.setOnAction(() => {
       val tagList = new TagList
