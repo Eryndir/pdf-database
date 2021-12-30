@@ -5,4 +5,6 @@ class TagList {
   def addList(tList: List[String]) = {
     tList.foreach(t => pQueue += t)
   }
+
+  def getQuery: String = { pQueue.mkString("%") }
 }

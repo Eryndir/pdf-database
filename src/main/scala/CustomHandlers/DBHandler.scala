@@ -81,7 +81,7 @@ class DBHandler:
 
   def getSearchResult(query: SearchQuery): ResultSet =
     if con == null then getConnection
-
+    println(query)
     println("getting Folders...")
     val prep = con.prepareStatement(
       "select source from pdfs where " +
@@ -92,7 +92,8 @@ class DBHandler:
     )
     prep.setString(1, "%" + query.name + "%")
     prep.setString(2, "%" + query.genre + "%")
-    prep.setString(3, "%" + query.tagsInString + "%")
+
+    prep.setString(3, "%" + query.tags.getQuery + "%")
     prep.setInt(4, query.pageNumbers)
     prep.setString(5, "%" + query.rating + "%")
     if query.read then {
@@ -110,7 +111,7 @@ class DBHandler:
       else query.category.title
     prep.setString(8, "%" + tmp + "%")
     prep.setString(9, "%" + query.rpg + "%")
-
+    println(prep)
     prep.executeQuery
 
   def displayEntries: ResultSet =

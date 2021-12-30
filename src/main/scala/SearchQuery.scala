@@ -1,7 +1,7 @@
 case class SearchQuery(
     name: String = "",
     genre: String = "",
-    tags: List[String] = List(),
+    tags: TagList = new TagList,
     pageNumbers: Int = 0,
     rating: String = "",
     read: Boolean = false,
@@ -9,4 +9,4 @@ case class SearchQuery(
     category: Category = Category.Uncategorized,
     rpg: String = ""
 ):
-  def tagsInString = tags.mkString("\n")
+  def tagsInString = tags.pQueue.mkString("\n")

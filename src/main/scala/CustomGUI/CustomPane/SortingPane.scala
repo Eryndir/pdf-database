@@ -60,11 +60,13 @@ class SortingPane extends FlowPane {
     left = new Button("Search") {
       onAction = () => {
         val pgNumAttr = attributePaneSeq(3).value
+        val tagList = new TagList
+        tagList.addList(tagArea.getTags)
         PanelHandler.centerView.refresh(
           new SearchQuery(
             attributePaneSeq(0).value,
             attributePaneSeq(1).value,
-            tagArea.getTags,
+            tagList,
             if (pgNumAttr.equals("")) 0 else pgNumAttr.toInt,
             attributePaneSeq(4).value,
             readCheck.isSelected,
