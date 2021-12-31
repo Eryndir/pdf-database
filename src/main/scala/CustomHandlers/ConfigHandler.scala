@@ -13,7 +13,8 @@ object ConfigReader:
 
   def setProperty(key: String, value: String): Unit =
     val prop = readProperties
-    prop.setProperty(key, value)
     val fos = new FileOutputStream("config.properties")
+
+    prop.setProperty(key, value)
     prop.store(fos, null)
     fos.close

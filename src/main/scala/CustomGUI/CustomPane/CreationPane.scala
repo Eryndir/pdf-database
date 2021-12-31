@@ -1,18 +1,11 @@
-import scalafx.scene.layout.BorderPane
+import scalafx.scene.layout._
 import scalafx.Includes._
 import scalafx.Includes.jfxControl2sfx
-import scalafx.scene.control.Label
+import scalafx.scene.control._
 import scalafx.geometry.Pos
-import scalafx.scene.layout.FlowPane
-import scalafx.scene.control.TextArea
-import scalafx.scene.control.TextField
-import scalafx.scene.control.MenuItem
-import scalafx.scene.control.MenuButton
-import scalafx.scene.control.Button
 import FilePathHandler._
 import java.awt.Desktop
 import java.net.{URI, URL}
-import scalafx.scene.control.CheckBox
 import org.apache.pdfbox._
 import org.apache.pdfbox.pdmodel.PDDocument
 import java.io.File
@@ -26,129 +19,95 @@ import java.awt.image.BufferedImage
 import net.coobird.thumbnailator.Thumbnails
 import javafx.css.PseudoClass
 import GUI._
-import scalafx.scene.control.ComboBox
 import scalafx.stage.DirectoryChooser
 import os.Path
 
-class CreationPane extends BorderPane {
+class CreationPane extends BorderPane:
   padding = new javafx.geometry.Insets(10, 10, 10, 10)
   visible = true
 
   var comboList: List[ComboText] = List()
-  var driveSearch = false
-  var pdfDest = ""
-  var folderChange = false
-
-  val pdfWindow = new ImageView {
-    alignmentInParent = Pos.Center
-  }
-
-  val createButton = new Button("CREATE") {
-    alignmentInParent = Pos.Center
-    visible = false
-  }
-
-  val comboBox = new ComboBox(Category.values.toIndexedSeq) {
-    minWidth = 300
-  }
+  val comboBox = new ComboBox(Category.values.toIndexedSeq) { minWidth = 300 }
   comboBox.getSelectionModel.selectLast
 
+  var driveSearch = false
   val tagArea = new TagArea
-
   val readCheck = new CheckBox
   val favCheck = new CheckBox
 
-  left = new FlowPane {
-    //prefWrapLength = 110
+  val pdfWindow = new ImageView { alignmentInParent = Pos.Center }
+  var pdfDest = ""
+  var folderChange = false
+  val createButton = new Button("CREATE"):
+    alignmentInParent = Pos.Center
+    visible = false
+
+  left = new FlowPane:
     comboList = List(
       new ComboText("Name"),
       new ComboText("Description"),
-      new ComboText("Category") {
-        right = comboBox
-      },
+      new ComboText("Category") { right = comboBox },
       new ComboText("Source"),
-      new ComboText("Drive Link") {
-        center = new CheckBox {
-          onAction = () => {
-            driveSearch = !driveSearch
-          }
-        }
-      },
+      new ComboText("Drive Link"):
+        center = new CheckBox:
+          onAction = () => driveSearch = !driveSearch
+      ,
       new ComboText("Genre"),
       new ComboText("Page Numbers"),
       new ComboText("Rating"),
-      new ComboText("Extra Material") {
-        center = new Button("CLEAR") {
-          onAction = () => {
-            textField.clear
-          }
-        }
-      },
+      new ComboText("Extra Material"):
+        center = new Button("CLEAR"):
+          onAction = () => textField.clear
+      ,
       new ComboText("RPG"),
-      new ComboText("Tags") {
-
-        right = tagArea
-
-      },
-      new ComboText("Read") {
-        right = readCheck
-      },
-      new ComboText("Favourite") {
-        right = favCheck
-      }
+      new ComboText("Tags") { right = tagArea },
+      new ComboText("Read") { right = readCheck },
+      new ComboText("Favourite") { right = favCheck }
     )
+
     children = comboList
 
-    //style = "-fx-border-color: rgb(150, 150, 150)"
-  }
-
-  right = new BorderPane {
+  right = new BorderPane:
     top = pdfWindow
 
-    bottom = new FlowPane {
+    bottom = new FlowPane:
       alignment = Pos.Center
       children = Seq(
-        new ComboText("Folder") {
-          center = new CheckBox {
-            onAction = () => {
-              folderChange = !folderChange
-            }
-          }
-          right = new Button("Select Folder") {
-            onAction = () => {
-              val dirChooser = new DirectoryChooser {
+        new ComboText("Folder"):
+          center = new CheckBox:
+            onAction = () => folderChange = !folderChange
+
+          right = new Button("Select Folder"):
+            onAction = () =>
+              val dirChooser = new DirectoryChooser:
                 title = s"Choose folder Directory"
                 initialDirectory = new java.io.File("/mnt/d/")
-              }
+
               pdfDest = dirChooser.showDialog(stage).toString
               text = pdfDest
-              val newPath = getWinPath(pdfDest)
 
+              val newPath = getWinPath(pdfDest)
               val newPdfSource =
                 comboList(3).text.substring(comboList(3).text.lastIndexOf("\\"))
               comboList(3).update(getWinPath(pdfDest) + newPdfSource)
               createButton.visible = true
-            }
-          }
-        },
+        ,
         createButton
       )
-    }
-  }
 
-  def update(pdf: PdfPane) = {
+  def update(pdf: PdfPane) =
     if folderChange then createButton.visible = false
     else createButton.visible = true
 
-    createButton.setOnAction(() => {
-      Platform.runLater(() -> {
+    createButton.setOnAction(() =>
+      Platform.runLater(() =>
         val childList = pdf.parentCombo.folder.getChildren
         childList.remove(pdf)
-        GUI.pool.execute(() => {
+
+        GUI.pool.execute(() =>
           val tagList = new TagList
-          tagList.addList(
-            tagArea.getTags
-          )
+          tagList.addList(tagArea.getTags)
+
           dbHandler.addEntry(
             new PdfObject(
               name = comboList(0).text,
@@ -166,21 +125,22 @@ class CreationPane extends BorderPane {
               favourite = favCheck.isSelected
             )
           )
+
           if folderChange then os.move.into(pdf.source, Path(pdfDest))
-        })
+        )
+
         if childList.size == 0 then
           pdf.parentCombo.folder.parentFolder.getChildren
             .remove(pdf.parentCombo)
 
         pdfWindow.setImage(null)
-        comboList(0).clear()
-        comboList(3).clear()
-        comboList(4).clear()
-        comboList(6).clear()
-        comboList(8).clear()
-      })
-
-    })
+        comboList(0).clear
+        comboList(3).clear
+        comboList(4).clear
+        comboList(6).clear
+        comboList(8).clear
+      )
+    )
 
     val pdfName = pdf.text.value
     val pdfSourceString = pdf.source.toString
@@ -190,7 +150,7 @@ class CreationPane extends BorderPane {
     val sel = new java.awt.datatransfer.StringSelection(pdfName)
     clipboard.setContents(sel, sel)
 
-    GUI.pool.execute(() => {
+    GUI.pool.execute(() =>
       val pdf = PDDocument.load(new File(pdfSourceString))
       val pdfNoPages = pdf.getNumberOfPages()
       val pdfImage = resizeImage(PDFRenderer(pdf).renderImage(0))
@@ -198,7 +158,7 @@ class CreationPane extends BorderPane {
 
       if driveSearch then driveLink = driveHandler.getFileLink(pdfName)
 
-      Platform.runLater(() -> {
+      Platform.runLater(() =>
         pdfWindow.image = SwingFXUtils.toFXImage(pdfImage, null)
         comboList(0).update(pdfName)
         comboList(3).update(pdfSource)
@@ -206,12 +166,10 @@ class CreationPane extends BorderPane {
         comboList(6).update("" + pdfNoPages)
         comboList(8).update(pdfSource.substring(0, pdfSource.lastIndexOf("\\")))
         GUI.stage.getScene.cursor = Cursor.sfxCursor2jfx(Cursor.Default)
-      })
-      pdf.close()
-    })
-  }
+      )
 
-  def resizeImage(image: BufferedImage): BufferedImage = {
+      pdf.close()
+    )
+
+  def resizeImage(image: BufferedImage): BufferedImage =
     Thumbnails.of(image).size(620, 440).asBufferedImage
-  }
-}

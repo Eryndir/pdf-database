@@ -24,8 +24,8 @@ class DBHandler:
         state.executeQuery(
           "SELECT name from sqlite_master WHERE type ='table' AND name= 'pdfs'"
         )
+
       if !res.next then
-        println("Building the pdf table")
         val state2 = con.createStatement
         state2.execute(
           "CREATE TABLE pdfs(" +
@@ -55,6 +55,7 @@ class DBHandler:
           s"?,?,?,?," +
           s"?,?,?)"
       )
+
     prep.setString(1, pdf.name)
     prep.setString(2, pdf.source)
     prep.setString(3, pdf.driveLink)
@@ -72,17 +73,15 @@ class DBHandler:
     prep.execute
 
   def searchEntry(name: String): ResultSet =
-    if con == null then
+    if con == null then getConnection
 
-      println("Searching")
     val statement = con.createStatement
     val res = statement.executeQuery(s"SELECT * FROM pdfs Where name='$name'")
     res
 
   def getSearchResult(query: SearchQuery): ResultSet =
     if con == null then getConnection
-    println(query)
-    println("getting Folders...")
+
     val prep = con.prepareStatement(
       "select source from pdfs where " +
         "name like ? and genre like ? and tags like ? and " +
@@ -90,28 +89,26 @@ class DBHandler:
         "read like ? and favourite like ? and " +
         "category like ? and rpg like ?"
     )
+
     prep.setString(1, "%" + query.name + "%")
     prep.setString(2, "%" + query.genre + "%")
-
     prep.setString(3, "%" + query.tags.getQuery + "%")
     prep.setInt(4, query.pageNumbers)
     prep.setString(5, "%" + query.rating + "%")
-    if query.read then {
-      prep.setString(6, query.read.toString)
-    } else {
-      prep.setString(6, "%")
-    }
-    if query.favourite then {
-      prep.setString(7, query.favourite.toString)
-    } else {
-      prep.setString(7, "%")
-    }
+
+    if query.read then prep.setString(6, query.read.toString)
+    else prep.setString(6, "%")
+
+    if query.favourite then prep.setString(7, query.favourite.toString)
+    else prep.setString(7, "%")
+
     val tmp =
       if query.category == Category.Uncategorized then ""
       else query.category.title
+
     prep.setString(8, "%" + tmp + "%")
     prep.setString(9, "%" + query.rpg + "%")
-    println(prep)
+
     prep.executeQuery
 
   def displayEntries: ResultSet =
@@ -123,8 +120,10 @@ class DBHandler:
 
   def getRow(res: ResultSet): PdfObject =
     if con == null then getConnection
+
     val tagList = (new TagList)
     tagList.addList(res.getString(5).split("\n").toList)
+
     val pdf = new PdfObject(
       res.getString(1),
       res.getString(2),
@@ -140,6 +139,7 @@ class DBHandler:
       rpg = res.getString(12),
       description = res.getString(13)
     )
+
     res.close
     pdf
 
@@ -149,30 +149,35 @@ class DBHandler:
     val searchRes = searchEntry(name)
     val pdf = getRow(searchRes)
     val pdfSource = s"'${pdf.source}'"
+
     s"wslview $pdfSource" !
 
-  def isInDB(path: Path): Boolean = {
+  def isInDB(path: Path): Boolean =
     if con == null then getConnection
+
     val source = getWinPath(path.toString)
     val prep = con.prepareStatement(
       s"select * from pdfs where source = ?"
     )
+
     prep.setString(1, source)
+
     val res = prep.executeQuery
     res.next
-  }
 
-  def getFromSource(path: String): PdfObject = {
+  def getFromSource(path: String): PdfObject =
     if con == null then getConnection
+
     val prep = con.prepareStatement(
       s"select * from pdfs where source = ?"
     )
+
     prep.setString(1, path)
+
     val res = prep.executeQuery
     getRow(res)
-  }
 
-  def update(pdf: PdfObject) = {
+  def update(pdf: PdfObject) =
     if con == null then getConnection
 
     val prep =
@@ -184,6 +189,7 @@ class DBHandler:
           "category = ?, rpg = ?, description = ? " +
           "WHERE source = ?"
       )
+
     prep.setString(1, pdf.name)
     prep.setString(2, pdf.source)
     prep.setString(3, pdf.driveLink)
@@ -200,18 +206,18 @@ class DBHandler:
     prep.setString(14, pdf.source)
 
     prep.execute
-  }
 
-  def addTag(tag: String) = {
+  def addTag(tag: String) =
     if con == null then getConnection
 
     val prep = con.prepareStatement("insert into tags (tag) values(?)")
+
     prep.setString(1, tag)
     prep.execute
-  }
 
-  def getTagList: List[String] = {
+  def getTagList: List[String] =
     if con == null then getConnection
+
     val prep = con.prepareStatement("select tag from tags")
     val res = prep.executeQuery
     var list: List[String] = List()
@@ -219,4 +225,3 @@ class DBHandler:
     while res.next do list = list :+ res.getString(1)
 
     list
-  }

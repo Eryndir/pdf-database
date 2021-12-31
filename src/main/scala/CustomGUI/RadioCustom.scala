@@ -14,7 +14,7 @@ import scala.language.postfixOps
 import State._
 
 class RadioCustom(bText: String, tg: ToggleGroup, bSelect: Boolean)
-    extends RadioButton {
+    extends RadioButton:
   styleClass -= "radio-button"
   styleClass += "toggle-button"
   minHeight = 50
@@ -24,11 +24,8 @@ class RadioCustom(bText: String, tg: ToggleGroup, bSelect: Boolean)
   toggleGroup = tg
   selected = bSelect
 
-  onAction = () => {
-    text.value match {
+  onAction = () =>
+    text.value match
 
       case "View"   => PanelHandler.update(VIEW)
       case "Create" => PanelHandler.update(CREATE)
-    }
-  }
-}

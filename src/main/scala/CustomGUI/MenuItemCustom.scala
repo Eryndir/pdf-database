@@ -12,35 +12,30 @@ import FilePathHandler._
 import scalafx.Includes.eventClosureWrapperWithZeroParam
 import os.Path
 
-class MenuItemCustom(name: String, stage: PrimaryStage) extends MenuItem {
+class MenuItemCustom(name: String, stage: PrimaryStage) extends MenuItem:
   text = name
-  onAction = () => {
-    val directoryChooser = new DirectoryChooser {
+
+  onAction = () =>
+    val directoryChooser = new DirectoryChooser:
       title = s"Choose $name Directory"
       initialDirectory = new java.io.File("/mnt/d/Roleplaying games/")
-    }
-    val selectedFolder =
-      directoryChooser.showDialog(stage).toString
+
+    val selectedFolder = directoryChooser.showDialog(stage).toString
 
     val previousFolder = ConfigReader.getProperty(s"${name}Path")
 
-    val alert = new Alert(AlertType.Confirmation) {
+    val alert = new Alert(AlertType.Confirmation):
       initOwner(stage)
       title = "Confirmation Dialog"
       headerText =
         s"About to change $name directory from \n$previousFolder \n\tto \n$selectedFolder"
       contentText = "Are you sure?"
-    }
 
     val result = alert.showAndWait()
 
-    result match {
-      case Some(ButtonType.OK) => {
+    result match
+      case Some(ButtonType.OK) =>
         val path = getWinPath(selectedFolder)
         LabelHandler.update(name, path.toString)
-      }
-      case _ => println("Cancel or closed")
-    }
 
-  }
-}
+      case _ => println("Cancel or closed")

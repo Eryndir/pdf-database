@@ -16,9 +16,8 @@ case class PdfObject(
 ):
 
   def categorySpecifics: String =
-    if (category.header == List()) {
-      ""
-    } else {
+    if (category.header == List()) ""
+    else
       val zippedSingle = category.header
         .zip(categoryInfo)
         .map { case (header, info) =>
@@ -26,7 +25,6 @@ case class PdfObject(
         }
         .mkString("\n")
       s"\n| $zippedSingle"
-    }
 
   def categoryName: String = category.title
 
@@ -42,7 +40,6 @@ case class PdfObject(
       s"| Extra material: $extraMaterial" +
       s"$categorySpecifics";
 
-  def toStringSmall =
-    s"$name - $categoryName\n"
+  def toStringSmall = s"$name - $categoryName\n"
 
   def tagsInString = tags.pQueue.mkString("\n")

@@ -5,28 +5,21 @@ import scala.language.postfixOps
 import os.RelPath
 
 object FilePathHandler:
-  def getFiles(path: Path): IndexedSeq[Path] =
-    os.list(path)
+  def getFiles(path: Path): IndexedSeq[Path] = os.list(path)
 
   def getWinPath(path: String): String =
-    val lmao = s"wslpath -w \"$path\"".!!
-    lmao.stripTrailing
+    s"wslpath -w \"$path\"".!!.stripTrailing
 
   def getUnixPath(path: String): String =
-    val lmao = s"wslpath -u \"$path\"".!!
-    lmao.stripTrailing
+    s"wslpath -u \"$path\"".!!.stripTrailing
 
-  def openFile(path: String): Unit =
-    s"explorer.exe $path".!
-
-  def convStrToPath(string: String): Path =
-    Path(string)
+  def openFile(path: String): Unit = s"explorer.exe $path".!
 
   def getMainPath(): Path =
-    convStrToPath(getUnixPath(ConfigReader.getProperty("MainPath")))
+    Path(getUnixPath(ConfigReader.getProperty("MainPath")))
 
   def getToReadPath(): Path =
-    convStrToPath(getUnixPath(ConfigReader.getProperty("ToReadPath")))
+    Path(getUnixPath(ConfigReader.getProperty("ToReadPath")))
 
   def getNeedSortingPath(): Path =
-    convStrToPath(getUnixPath(ConfigReader.getProperty("NotSortedPath")))
+    Path(getUnixPath(ConfigReader.getProperty("NotSortedPath")))

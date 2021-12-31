@@ -1,7 +1,7 @@
 enum Category(
     val title: String,
     val header: List[String]
-): // less hardcoded categories?
+):
   case CollsCampaigns
       extends Category(
         "Adventure Collections and Campaigns",
