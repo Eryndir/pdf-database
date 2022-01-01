@@ -16,7 +16,7 @@ import scalafx.application.Platform
 
 class PdfAttributesPane(openButton: Button, updateButton: Button)
     extends BorderPane:
-  val comboBox = new ComboBox(Category.values.toIndexedSeq) { minWidth = 300 }
+  val comboBox = new ComboBox(dbHandler.getCategoryTitles) { minWidth = 300 }
   val tagArea = new TagArea
 
   val readCheck = new CheckBox
@@ -35,7 +35,18 @@ class PdfAttributesPane(openButton: Button, updateButton: Button)
     new AttributePane("Page Numbers"),
     new AttributePane("Rating"),
     new AttributePane("Extra Material:"),
-    new AttributePane("Tags") { center = tagArea }
+    new AttributePane("Tags") { center = tagArea },
+    new AttributePane("lmao") {
+      left = new TextField {
+        maxWidth = 75
+      }
+      center = new TextField {
+        maxWidth = 75
+      }
+      right = new TextField {
+        maxWidth = 75
+      }
+    }
   )
 
   val leftPane = attributePaneSeq.take(9)
@@ -50,11 +61,10 @@ class PdfAttributesPane(openButton: Button, updateButton: Button)
     prefWrapLength = 100
 
     children = rightPane
-    children.prepend(new BorderPane:
+    children += new BorderPane:
       alignment = Pos.Center
-      left = openButton
-      right = updateButton
-    )
+      top = openButton
+      bottom = updateButton
 
   def update(pdfSource: String) =
     val pdf = dbHandler.getFromSource(pdfSource)
@@ -63,7 +73,7 @@ class PdfAttributesPane(openButton: Button, updateButton: Button)
     attributePaneSeq(1).update(pdf.description)
     attributePaneSeq(2).update(pdf.genre)
     attributePaneSeq(3).update(pdf.rpg)
-    comboBox.getSelectionModel.select(pdf.category)
+    comboBox.getSelectionModel.select(pdf.category.title)
     readCheck.selected = pdf.read
     favCheck.selected = pdf.favourite
     attributePaneSeq(7).update(pdf.source)
@@ -83,7 +93,7 @@ class PdfAttributesPane(openButton: Button, updateButton: Button)
           description = attributePaneSeq(1).value,
           genre = attributePaneSeq(2).value,
           rpg = attributePaneSeq(3).value,
-          category = comboBox.value.value,
+          category = Category.valueOf(comboBox.value.value),
           read = readCheck.isSelected,
           favourite = favCheck.isSelected,
           source = attributePaneSeq(7).value,

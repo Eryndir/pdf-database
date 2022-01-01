@@ -35,3 +35,7 @@ enum Category(
   case TrapsPuzzles extends Category("Traps, Puzzles, etc", List("Amount"))
   case Worldbuilding extends Category("Worldbuilding", List())
   case Uncategorized extends Category("Uncategorized", List())
+
+object Category:
+  def titleOf(tParam: String): Category =
+    Category.values.filter(x => x.title.equals(tParam)).head

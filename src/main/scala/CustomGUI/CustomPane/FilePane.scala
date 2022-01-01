@@ -20,7 +20,7 @@ import GUI._
 import scalafx.scene.control.Alert.AlertType
 
 class FilePane extends BorderPane:
-  minWidth = (110 * 5) + 5
+  minWidth = (110 * 6) + 5
 
   val tiles = new FlowPane
   val tgFiles = new ToggleGroup

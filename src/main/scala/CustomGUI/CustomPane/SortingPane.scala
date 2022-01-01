@@ -3,11 +3,12 @@ import scalafx.Includes.jfxControl2sfx
 import scalafx.scene.control._
 import scalafx.geometry.Pos
 import scalafx.scene.layout._
+import GUI._
 
 class SortingPane extends FlowPane:
   maxWidth = 200
 
-  val comboBox = new ComboBox(Category.values.toIndexedSeq) { minWidth = 300 }
+  val comboBox = new ComboBox(dbHandler.getCategoryTitles) { minWidth = 300 }
 
   comboBox.getSelectionModel.selectLast
 
@@ -54,7 +55,7 @@ class SortingPane extends FlowPane:
             attributePaneSeq(4).value,
             readCheck.isSelected,
             favCheck.isSelected,
-            comboBox.value.value,
+            Category.titleOf(comboBox.value.value),
             attributePaneSeq(5).value
           )
         )

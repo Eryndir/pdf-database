@@ -14,7 +14,8 @@ import GUI._
 import scalafx.application.Platform
 import scalafx.scene.control._
 
-class AttributePane(lText: String) extends BorderPane:
+class AttributePane(lText: String, creationPane: Boolean = false)
+    extends BorderPane:
   padding = new javafx.geometry.Insets(10, 10, 10, 10)
 
   val label = new Label(lText)

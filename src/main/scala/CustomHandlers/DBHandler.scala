@@ -135,7 +135,7 @@ class DBHandler:
       res.getString(8).toBoolean,
       res.getString(9).toBoolean,
       res.getString(10),
-      Category.valueOf(res.getString(11)),
+      Category.titleOf(res.getString(11)),
       rpg = res.getString(12),
       description = res.getString(13)
     )
@@ -225,3 +225,27 @@ class DBHandler:
     while res.next do list = list :+ res.getString(1)
 
     list
+
+  def getCategoryTitles: List[String] =
+    if con == null then getConnection
+
+    val prep = con.prepareStatement("select title from categories")
+    val res = prep.executeQuery
+    var list: List[String] = List()
+
+    while res.next do list = list :+ res.getString(1)
+
+    list
+
+  def addCategory(category: String, h1: String, h2: String, h3: String) =
+    if con == null then getConnection
+
+    val prep = con.prepareStatement(
+      "insert into categories (title, header1, header2, header3) values(?, ?, ?, ?)"
+    )
+
+    prep.setString(1, category)
+    prep.setString(2, h1)
+    prep.setString(3, h2)
+    prep.setString(4, h3)
+    prep.execute

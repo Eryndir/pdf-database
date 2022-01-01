@@ -26,8 +26,8 @@ class CreationPane extends BorderPane:
   padding = new javafx.geometry.Insets(10, 10, 10, 10)
   visible = true
 
-  var comboList: List[ComboText] = List()
-  val comboBox = new ComboBox(Category.values.toIndexedSeq) { minWidth = 300 }
+  var comboList: List[AttributePane] = List()
+  val comboBox = new ComboBox(dbHandler.getCategoryTitles) { minWidth = 300 }
   comboBox.getSelectionModel.selectLast
 
   var driveSearch = false
@@ -44,36 +44,40 @@ class CreationPane extends BorderPane:
 
   left = new FlowPane:
     comboList = List(
-      new ComboText("Name"),
-      new ComboText("Description"),
-      new ComboText("Category") { right = comboBox },
-      new ComboText("Source"),
-      new ComboText("Drive Link"):
+      new AttributePane("Name"),
+      new AttributePane("Description"),
+      new AttributePane("Category") { center = comboBox },
+      new AttributePane("Source"),
+      new AttributePane("Drive Link"):
         center = new CheckBox:
           onAction = () => driveSearch = !driveSearch
       ,
-      new ComboText("Genre"),
-      new ComboText("Page Numbers"),
-      new ComboText("Rating"),
-      new ComboText("Extra Material"):
-        center = new Button("CLEAR"):
+      new AttributePane("Genre"),
+      new AttributePane("Page Numbers"),
+      new AttributePane("Rating"),
+      new AttributePane("Extra Material"):
+        textField.minWidth = 30
+        textField.maxWidth = 30
+        left = new Button("CLEAR"):
           onAction = () => textField.clear
       ,
-      new ComboText("RPG"),
-      new ComboText("Tags") { right = tagArea },
-      new ComboText("Read") { right = readCheck },
-      new ComboText("Favourite") { right = favCheck }
+      new AttributePane("RPG"),
+      new AttributePane("Tags") { center = tagArea },
+      new AttributePane("Read") { center = readCheck },
+      new AttributePane("Favourite") { center = favCheck }
     )
 
+    prefWrapLength = 50
     children = comboList
 
   right = new BorderPane:
+    minWidth = 750
     top = pdfWindow
 
     bottom = new FlowPane:
       alignment = Pos.Center
       children = Seq(
-        new ComboText("Folder"):
+        new AttributePane("Folder"):
           center = new CheckBox:
             onAction = () => folderChange = !folderChange
 
@@ -88,7 +92,9 @@ class CreationPane extends BorderPane:
 
               val newPath = getWinPath(pdfDest)
               val newPdfSource =
-                comboList(3).text.substring(comboList(3).text.lastIndexOf("\\"))
+                comboList(3).value.substring(
+                  comboList(3).value.lastIndexOf("\\")
+                )
               comboList(3).update(getWinPath(pdfDest) + newPdfSource)
               createButton.visible = true
         ,
@@ -110,16 +116,16 @@ class CreationPane extends BorderPane:
 
           dbHandler.addEntry(
             new PdfObject(
-              name = comboList(0).text,
-              description = comboList(1).text,
-              category = comboBox.value.value,
-              source = comboList(3).text,
-              driveLink = comboList(4).text,
-              genre = comboList(5).text,
-              pageNumbers = comboList(6).text.toInt,
-              rating = comboList(7).text,
-              extraMaterial = comboList(8).text,
-              rpg = comboList(9).text,
+              name = comboList(0).value,
+              description = comboList(1).value,
+              category = Category.titleOf((comboBox.value.value)),
+              source = comboList(3).value,
+              driveLink = comboList(4).value,
+              genre = comboList(5).value,
+              pageNumbers = comboList(6).value.toInt,
+              rating = comboList(7).value,
+              extraMaterial = comboList(8).value,
+              rpg = comboList(9).value,
               tags = tagList,
               read = readCheck.isSelected,
               favourite = favCheck.isSelected
