@@ -49,7 +49,7 @@ class DBHandler:
 
     val prep =
       con.prepareStatement(
-        s"INSERT INTO pdfs (name, source, driveLink, genre, tags, pageNumbers, rating, read, favourite, extramaterial, category, rpg, description) " +
+        s"INSERT INTO pdfs (name, source, driveLink, genre, tags, pageNumbers, rating, read, favourite, extramaterial, category, rpg, description, header1, header2, header3) " +
           s"values(?,?,?," +
           s"?,?,?," +
           s"?,?,?,?," +
