@@ -25,6 +25,7 @@ class DataBasePane extends BorderPane:
   center = new ScrollPane { content = tiles }
 
   def refresh(query: SearchQuery) =
+    println(query)
     loading = true
 
     Platform.runLater(() =>

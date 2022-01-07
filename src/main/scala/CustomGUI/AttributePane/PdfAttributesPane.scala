@@ -16,7 +16,7 @@ import scalafx.application.Platform
 
 class PdfAttributesPane(openButton: Button, updateButton: Button)
     extends BorderPane:
-  val comboBox = new ComboBox(dbHandler.getCategoryTitles) { minWidth = 300 }
+  val categoryPane = new CategoryPane
   val tagArea = new TagArea
 
   val readCheck = new CheckBox
@@ -27,26 +27,21 @@ class PdfAttributesPane(openButton: Button, updateButton: Button)
     new AttributePane("Description"),
     new AttributePane("Genre"),
     new AttributePane("RPG"),
-    new AttributePane("Category") { center = comboBox },
+    categoryPane,
     new AttributePane("Read") { center = readCheck },
     new AttributePane("Favourite") { center = favCheck },
     new AttributePane("Source") { textField.setEditable(false) },
     new AttributePane("Drive Link") { textField.setEditable(false) },
-    new AttributePane("Page Numbers"),
-    new AttributePane("Rating"),
+    new AttributePane("Page Numbers"):
+      textField.minWidth = 100
+      textField.maxWidth = 100
+    ,
+    new AttributePane("Rating"):
+      textField.minWidth = 100
+      textField.maxWidth = 100
+    ,
     new AttributePane("Extra Material:"),
-    new AttributePane("Tags") { center = tagArea },
-    new AttributePane("lmao") {
-      left = new TextField {
-        maxWidth = 75
-      }
-      center = new TextField {
-        maxWidth = 75
-      }
-      right = new TextField {
-        maxWidth = 75
-      }
-    }
+    new AttributePane("Tags") { center = tagArea }
   )
 
   val leftPane = attributePaneSeq.take(9)
@@ -73,7 +68,7 @@ class PdfAttributesPane(openButton: Button, updateButton: Button)
     attributePaneSeq(1).update(pdf.description)
     attributePaneSeq(2).update(pdf.genre)
     attributePaneSeq(3).update(pdf.rpg)
-    comboBox.getSelectionModel.select(pdf.category.title)
+    categoryPane.comboBox.getSelectionModel.select(pdf.category.title)
     readCheck.selected = pdf.read
     favCheck.selected = pdf.favourite
     attributePaneSeq(7).update(pdf.source)
@@ -82,6 +77,18 @@ class PdfAttributesPane(openButton: Button, updateButton: Button)
     attributePaneSeq(10).update(pdf.rating)
     attributePaneSeq(11).update(pdf.extraMaterial)
     tagArea.update(pdf.tagsInString)
+    categoryPane.updateValue(
+      pdf.categoryInfo(0),
+      pdf.categoryInfo(1),
+      pdf.categoryInfo(2)
+    )
+
+    val pdfCat = pdf.category
+    categoryPane.headers.updateLabel(
+      pdfCat.header1,
+      pdfCat.header2,
+      pdfCat.header3
+    )
 
     updateButton.setOnAction(() =>
       val tagList = new TagList
@@ -93,7 +100,7 @@ class PdfAttributesPane(openButton: Button, updateButton: Button)
           description = attributePaneSeq(1).value,
           genre = attributePaneSeq(2).value,
           rpg = attributePaneSeq(3).value,
-          category = Category.valueOf(comboBox.value.value),
+          category = dbHandler.getCategory(categoryPane.value),
           read = readCheck.isSelected,
           favourite = favCheck.isSelected,
           source = attributePaneSeq(7).value,
@@ -101,7 +108,12 @@ class PdfAttributesPane(openButton: Button, updateButton: Button)
           pageNumbers = attributePaneSeq(9).value.toInt,
           rating = attributePaneSeq(10).value,
           extraMaterial = attributePaneSeq(11).value,
-          tags = tagList
+          tags = tagList,
+          categoryInfo = List(
+            categoryPane.headerValues._1,
+            categoryPane.headerValues._2,
+            categoryPane.headerValues._3
+          )
         )
 
       dbHandler.update(updatedPdf)

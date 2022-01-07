@@ -14,7 +14,7 @@ import GUI._
 import scalafx.application.Platform
 import scalafx.scene.control._
 
-class AttributePane(lText: String, creationPane: Boolean = false)
+class AttributePane(lText: String = "", creationPane: Boolean = false)
     extends BorderPane:
   padding = new javafx.geometry.Insets(10, 10, 10, 10)
 
@@ -26,6 +26,6 @@ class AttributePane(lText: String, creationPane: Boolean = false)
 
   def update(newText: String) = textField.text = newText
 
-  def value: String = textField.text.value
+  def value: String = textField.getText
 
   def clear = textField.clear

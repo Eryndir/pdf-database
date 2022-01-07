@@ -8,9 +8,7 @@ import GUI._
 class SortingPane extends FlowPane:
   maxWidth = 200
 
-  val comboBox = new ComboBox(dbHandler.getCategoryTitles) { minWidth = 300 }
-
-  comboBox.getSelectionModel.selectLast
+  val categoryPane = new CategoryPane
 
   val readCheck = new CheckBox
   val favCheck = new CheckBox
@@ -19,7 +17,7 @@ class SortingPane extends FlowPane:
   val attributePaneSeq = Seq(
     new AttributePane("Name"),
     new AttributePane("Genre"),
-    new AttributePane("Category") { center = comboBox },
+    categoryPane,
     new AttributePane("Page Numbers"):
       textField.minWidth = 100
       textField.maxWidth = 100
@@ -55,7 +53,7 @@ class SortingPane extends FlowPane:
             attributePaneSeq(4).value,
             readCheck.isSelected,
             favCheck.isSelected,
-            Category.titleOf(comboBox.value.value),
+            dbHandler.getCategory(categoryPane.value),
             attributePaneSeq(5).value
           )
         )
@@ -65,5 +63,5 @@ class SortingPane extends FlowPane:
         attributePaneSeq.map(x => x.clear)
         readCheck.selected = false
         favCheck.selected = false
-        comboBox.getSelectionModel.selectLast
+        categoryPane.comboBox.getSelectionModel.selectLast
         tagArea.clear

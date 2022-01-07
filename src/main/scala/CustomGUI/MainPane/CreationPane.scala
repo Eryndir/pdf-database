@@ -27,8 +27,7 @@ class CreationPane extends BorderPane:
   visible = true
 
   var comboList: List[AttributePane] = List()
-  val comboBox = new ComboBox(dbHandler.getCategoryTitles) { minWidth = 300 }
-  comboBox.getSelectionModel.selectLast
+  val categoryPane = new CategoryPane
 
   var driveSearch = false
   val tagArea = new TagArea
@@ -37,27 +36,26 @@ class CreationPane extends BorderPane:
 
   val pdfWindow = new ImageView { alignmentInParent = Pos.Center }
   var pdfDest = ""
-  var folderChange = false
-  val createButton = new Button("CREATE"):
-    alignmentInParent = Pos.Center
-    visible = false
+  val createButton = new Button("CREATE") { alignmentInParent = Pos.Center }
 
   left = new FlowPane:
     comboList = List(
       new AttributePane("Name"),
       new AttributePane("Description"),
-      new AttributePane("Category") { center = comboBox },
+      categoryPane,
       new AttributePane("Source"),
       new AttributePane("Drive Link"):
-        center = new CheckBox:
+        textField.minWidth = 280
+        textField.maxWidth = 280
+        left = new CheckBox:
           onAction = () => driveSearch = !driveSearch
       ,
       new AttributePane("Genre"),
       new AttributePane("Page Numbers"),
       new AttributePane("Rating"),
       new AttributePane("Extra Material"):
-        textField.minWidth = 30
-        textField.maxWidth = 30
+        textField.minWidth = 240
+        textField.maxWidth = 240
         left = new Button("CLEAR"):
           onAction = () => textField.clear
       ,
@@ -78,17 +76,14 @@ class CreationPane extends BorderPane:
       alignment = Pos.Center
       children = Seq(
         new AttributePane("Folder"):
-          center = new CheckBox:
-            onAction = () => folderChange = !folderChange
 
-          right = new Button("Select Folder"):
+          center = new Button("Select Folder"):
             onAction = () =>
               val dirChooser = new DirectoryChooser:
                 title = s"Choose folder Directory"
                 initialDirectory = new java.io.File("/mnt/d/")
 
               pdfDest = dirChooser.showDialog(stage).toString
-              text = pdfDest
 
               val newPath = getWinPath(pdfDest)
               val newPdfSource =
@@ -96,14 +91,11 @@ class CreationPane extends BorderPane:
                   comboList(3).value.lastIndexOf("\\")
                 )
               comboList(3).update(getWinPath(pdfDest) + newPdfSource)
-              createButton.visible = true
         ,
         createButton
       )
 
   def update(pdf: PdfPane) =
-    if folderChange then createButton.visible = false
-    else createButton.visible = true
 
     createButton.setOnAction(() =>
       Platform.runLater(() =>
@@ -113,26 +105,35 @@ class CreationPane extends BorderPane:
         GUI.pool.execute(() =>
           val tagList = new TagList
           tagList.addList(tagArea.getTags)
-
           dbHandler.addEntry(
             new PdfObject(
               name = comboList(0).value,
               description = comboList(1).value,
-              category = Category.titleOf((comboBox.value.value)),
+              category = dbHandler.getCategory(categoryPane.value),
               source = comboList(3).value,
               driveLink = comboList(4).value,
               genre = comboList(5).value,
-              pageNumbers = comboList(6).value.toInt,
+              pageNumbers =
+                if comboList(6).value.equals("") then 0
+                else comboList(6).value.toInt,
               rating = comboList(7).value,
               extraMaterial = comboList(8).value,
               rpg = comboList(9).value,
               tags = tagList,
               read = readCheck.isSelected,
-              favourite = favCheck.isSelected
+              favourite = favCheck.isSelected,
+              categoryInfo = List(
+                categoryPane.headerValues._1,
+                categoryPane.headerValues._2,
+                categoryPane.headerValues._3
+              )
             )
           )
-
-          if folderChange then os.move.into(pdf.source, Path(pdfDest))
+          try {
+            os.move.into(pdf.source, Path(pdfDest))
+          } catch {
+            case _: Throwable => println("Couldnt move file")
+          }
         )
 
         if childList.size == 0 then
@@ -140,11 +141,6 @@ class CreationPane extends BorderPane:
             .remove(pdf.parentCombo)
 
         pdfWindow.setImage(null)
-        comboList(0).clear
-        comboList(3).clear
-        comboList(4).clear
-        comboList(6).clear
-        comboList(8).clear
       )
     )
 
