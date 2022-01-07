@@ -36,9 +36,10 @@ class TagArea extends BorderPane:
 
           onAction = () =>
             val tag = newTagField.text.value
-            obsAllTags.add(tag)
-            dbHandler.addTag(tag)
-            newTagField.clear
+            if !tag.equals("") then
+              obsAllTags.add(tag)
+              dbHandler.addTag(tag)
+              newTagField.clear
         ,
         new Button("Move"):
           minWidth = 75
@@ -66,5 +67,4 @@ class TagArea extends BorderPane:
 
   def update(tList: String) =
     obsSelcTags.remove(0, obsSelcTags.size)
-    println("lmao")
     setTags(tList)

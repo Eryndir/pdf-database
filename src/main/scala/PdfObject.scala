@@ -9,22 +9,11 @@ case class PdfObject(
     read: Boolean = false,
     favourite: Boolean = false,
     extraMaterial: String = "N/A extraMaterial",
-    category: Category = Category.Uncategorized,
-    categoryInfo: List[String] = List(), // BUILDER PATTERN?
+    category: Category = new Category,
+    categoryInfo: List[String] = List("", "", ""),
     rpg: String = "System Neutral",
     description: String = "N/A description"
 ):
-
-  def categorySpecifics: String =
-    if (category.header == List()) ""
-    else
-      val zippedSingle = category.header
-        .zip(categoryInfo)
-        .map { case (header, info) =>
-          s"$header: $info"
-        }
-        .mkString("\n")
-      s"\n| $zippedSingle"
 
   def categoryName: String = category.title
 
@@ -37,8 +26,7 @@ case class PdfObject(
       s"| Genre: $genre, Tags: ${tags.pQueue.mkString(", ")}\n" +
       s"| Pages: $pageNumbers, Rating: $rating\n" +
       s"| Read: $read, Favourite: $favourite\n" +
-      s"| Extra material: $extraMaterial" +
-      s"$categorySpecifics";
+      s"| Extra material: $extraMaterial"
 
   def toStringSmall = s"$name - $categoryName\n"
 

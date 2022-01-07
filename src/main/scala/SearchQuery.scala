@@ -6,7 +6,7 @@ case class SearchQuery(
     rating: String = "",
     read: Boolean = false,
     favourite: Boolean = false,
-    category: Category = Category.Uncategorized,
+    category: Category = new Category,
     rpg: String = ""
 ):
   def tagsInString = tags.pQueue.mkString("\n")

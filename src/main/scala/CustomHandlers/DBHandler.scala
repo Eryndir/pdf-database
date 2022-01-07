@@ -53,6 +53,7 @@ class DBHandler:
           s"values(?,?,?," +
           s"?,?,?," +
           s"?,?,?,?," +
+          s"?,?,?," +
           s"?,?,?)"
       )
 
@@ -69,6 +70,9 @@ class DBHandler:
     prep.setString(11, pdf.category.title)
     prep.setString(12, pdf.rpg)
     prep.setString(13, pdf.description)
+    prep.setString(14, pdf.categoryInfo(0))
+    prep.setString(15, pdf.categoryInfo(1))
+    prep.setString(16, pdf.categoryInfo(2))
 
     prep.execute
 
@@ -102,11 +106,7 @@ class DBHandler:
     if query.favourite then prep.setString(7, query.favourite.toString)
     else prep.setString(7, "%")
 
-    val tmp =
-      if query.category == Category.Uncategorized then ""
-      else query.category.title
-
-    prep.setString(8, "%" + tmp + "%")
+    prep.setString(8, "%" + query.category.title + "%")
     prep.setString(9, "%" + query.rpg + "%")
 
     prep.executeQuery
@@ -135,9 +135,11 @@ class DBHandler:
       res.getString(8).toBoolean,
       res.getString(9).toBoolean,
       res.getString(10),
-      Category.titleOf(res.getString(11)),
+      getCategory(res.getString(11)),
       rpg = res.getString(12),
-      description = res.getString(13)
+      description = res.getString(13),
+      categoryInfo =
+        List(res.getString(14), res.getString(15), res.getString(16))
     )
 
     res.close
@@ -186,7 +188,8 @@ class DBHandler:
           "name = ?, source = ?, driveLink = ?, genre = ?, " +
           "tags = ?, pageNumbers = ?, rating = ?," +
           "read = ?, favourite = ?, extramaterial = ?, " +
-          "category = ?, rpg = ?, description = ? " +
+          "category = ?, rpg = ?, description = ? ," +
+          "header1 = ?, header2 = ?, header3 = ?" +
           "WHERE source = ?"
       )
 
@@ -203,7 +206,10 @@ class DBHandler:
     prep.setString(11, pdf.category.title)
     prep.setString(12, pdf.rpg)
     prep.setString(13, pdf.description)
-    prep.setString(14, pdf.source)
+    prep.setString(14, pdf.categoryInfo(0))
+    prep.setString(15, pdf.categoryInfo(1))
+    prep.setString(16, pdf.categoryInfo(2))
+    prep.setString(17, pdf.source)
 
     prep.execute
 
@@ -225,6 +231,17 @@ class DBHandler:
     while res.next do list = list :+ res.getString(1)
 
     list
+
+  def getCategory(title: String): Category =
+    if con == null then getConnection
+
+    val prep = con.prepareStatement("select * from categories where title = ?")
+    prep.setString(1, title)
+    val res = prep.executeQuery
+    var newTitle = title
+
+    if title.equals("Uncategorized") then newTitle = ""
+    new Category(newTitle, res.getString(2), res.getString(3), res.getString(4))
 
   def getCategoryTitles: List[String] =
     if con == null then getConnection
