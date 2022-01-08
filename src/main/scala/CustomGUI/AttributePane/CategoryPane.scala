@@ -4,25 +4,20 @@ import scalafx.Includes.jfxControl2sfx
 import scalafx.scene.control._
 import GUI._
 
-class CategoryPane(addable: Boolean = true) extends AttributePane("Category"):
-  textField.minWidth = 250
-  textField.maxWidth = 250
-
+class CategoryPane extends AttributePane("Category"):
   val headers = new HeaderAttributePane
 
   val comboBox = new ComboBox(dbHandler.getCategoryTitles):
-    minWidth = 50
-    maxWidth = 50
+    minWidth = 300
+    maxWidth = 300
 
     onAction = () =>
       val strSelected = this.getSelectionModel.getSelectedItem
-      textField.text = strSelected
-
       val tmp = dbHandler.getCategory(strSelected)
       headers.updateLabel(tmp.header1, tmp.header2, tmp.header3)
 
   left = comboBox
-  if !addable then center = null
+  center = null
   bottom = headers
 
   comboBox.getSelectionModel.selectLast
