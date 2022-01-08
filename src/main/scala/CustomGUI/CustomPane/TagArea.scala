@@ -10,15 +10,17 @@ import scalafx.beans.Observable
 import scalafx.collections.ObservableBuffer
 import GUI._
 
+object TagHelper:
+  val obsAllTags = new ObservableBuffer[String]
+  obsAllTags.addAll(dbHandler.getTagList)
+
 class TagArea extends BorderPane:
   maxHeight = 200
 
-  val obsAllTags = new ObservableBuffer[String]
+  val localAllTags = TagHelper.obsAllTags
   val obsSelcTags = new ObservableBuffer[String]
 
-  obsAllTags.addAll(dbHandler.getTagList)
-
-  val leftList = new ListView(obsAllTags) { maxWidth = 150 }
+  val leftList = new ListView(localAllTags) { maxWidth = 150 }
   val rightList = new ListView(obsSelcTags) { maxWidth = 150 }
 
   left = leftList
@@ -37,7 +39,7 @@ class TagArea extends BorderPane:
           onAction = () =>
             val tag = newTagField.text.value
             if !tag.equals("") then
-              obsAllTags.add(tag)
+              localAllTags.add(tag)
               dbHandler.addTag(tag)
               newTagField.clear
         ,

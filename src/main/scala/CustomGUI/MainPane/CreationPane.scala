@@ -24,12 +24,14 @@ import os.Path
 
 class CreationPane extends BorderPane:
   padding = new javafx.geometry.Insets(10, 10, 10, 10)
+  maxHeight = 900
   visible = true
 
   var comboList: List[AttributePane] = List()
   val categoryPane = new CategoryPane
 
   var driveSearch = false
+  val systemPane = new SystemPane
   val tagArea = new TagArea
   val readCheck = new CheckBox
   val favCheck = new CheckBox
@@ -59,7 +61,7 @@ class CreationPane extends BorderPane:
         left = new Button("CLEAR"):
           onAction = () => textField.clear
       ,
-      new AttributePane("RPG"),
+      systemPane,
       new AttributePane("Tags") { center = tagArea },
       new AttributePane("Read") { center = readCheck },
       new AttributePane("Favourite") { center = favCheck }

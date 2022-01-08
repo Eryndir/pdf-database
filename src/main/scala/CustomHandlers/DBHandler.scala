@@ -266,3 +266,24 @@ class DBHandler:
     prep.setString(3, h2)
     prep.setString(4, h3)
     prep.execute
+
+  def getSystems: List[String] =
+    if con == null then getConnection
+
+    val prep = con.prepareStatement("select name from system")
+    val res = prep.executeQuery
+    var list: List[String] = List()
+
+    while res.next do list = list :+ res.getString(1)
+
+    list
+
+  def addSystem(system: String) =
+    if con == null then getConnection
+
+    val prep = con.prepareStatement(
+      "insert into system (name) values(?)"
+    )
+
+    prep.setString(1, system)
+    prep.execute

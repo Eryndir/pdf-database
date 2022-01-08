@@ -16,6 +16,7 @@ import scalafx.application.Platform
 
 class PdfAttributesPane(openButton: Button, updateButton: Button)
     extends BorderPane:
+  val systemPane = new SystemPane
   val categoryPane = new CategoryPane
   val tagArea = new TagArea
 
@@ -26,7 +27,7 @@ class PdfAttributesPane(openButton: Button, updateButton: Button)
     new AttributePane("Name"),
     new AttributePane("Description"),
     new AttributePane("Genre"),
-    new AttributePane("RPG"),
+    systemPane,
     categoryPane,
     new AttributePane("Read") { center = readCheck },
     new AttributePane("Favourite") { center = favCheck },
@@ -44,8 +45,8 @@ class PdfAttributesPane(openButton: Button, updateButton: Button)
     new AttributePane("Tags") { center = tagArea }
   )
 
-  val leftPane = attributePaneSeq.take(9)
-  val rightPane = attributePaneSeq.drop(9)
+  val leftPane = attributePaneSeq.take(8)
+  val rightPane = attributePaneSeq.drop(8)
 
   left = new FlowPane:
     prefWrapLength = 100
