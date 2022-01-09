@@ -135,13 +135,12 @@ class DBHandler:
       res.getString(8).toBoolean,
       res.getString(9).toBoolean,
       res.getString(10),
-      getCategory(res.getString(11)),
       rpg = res.getString(12),
       description = res.getString(13),
       categoryInfo =
         List(res.getString(14), res.getString(15), res.getString(16))
     )
-
+    val tmp = getCategory(res.getString(11))
     res.close
     pdf
 
@@ -235,12 +234,12 @@ class DBHandler:
   def getCategory(title: String): Category =
     if con == null then getConnection
 
+    if title.equals("") then return new Category
     val prep = con.prepareStatement("select * from categories where title = ?")
     prep.setString(1, title)
     val res = prep.executeQuery
     var newTitle = title
 
-    if title.equals("Uncategorized") then newTitle = ""
     new Category(newTitle, res.getString(2), res.getString(3), res.getString(4))
 
   def getCategoryTitles: List[String] =

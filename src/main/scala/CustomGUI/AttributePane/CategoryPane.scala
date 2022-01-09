@@ -10,17 +10,23 @@ class CategoryPane extends AttributePane("Category"):
   val comboBox = new ComboBox(dbHandler.getCategoryTitles):
     minWidth = 300
     maxWidth = 300
+    visibleRowCount = 5
 
     onAction = () =>
       val strSelected = this.getSelectionModel.getSelectedItem
-      val tmp = dbHandler.getCategory(strSelected)
-      headers.updateLabel(tmp.header1, tmp.header2, tmp.header3)
+      if !strSelected.equals("") then
+        val tmp = dbHandler.getCategory(strSelected)
+        headers.updateLabel(tmp.header1, tmp.header2, tmp.header3)
+      else headers.updateLabel("", "", "")
 
   left = comboBox
   center = null
   bottom = headers
 
   comboBox.getSelectionModel.selectLast
+
+  override def value: String =
+    comboBox.getSelectionModel.getSelectedItem
 
   def headerValues: (String, String, String) =
     headers.valueTouple

@@ -9,7 +9,7 @@ case class PdfObject(
     read: Boolean = false,
     favourite: Boolean = false,
     extraMaterial: String = "N/A extraMaterial",
-    category: Category = new Category,
+    var category: Category = new Category,
     categoryInfo: List[String] = List("", "", ""),
     rpg: String = "System Neutral",
     description: String = "N/A description"

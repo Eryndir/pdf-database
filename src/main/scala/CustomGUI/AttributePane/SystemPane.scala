@@ -18,6 +18,7 @@ class SystemPane extends AttributePane("System"):
   val comboBox = new ComboBox(localBuffer):
     minWidth = 50
     maxWidth = 50
+    visibleRowCount = 5
 
     onAction = () =>
       val strSelected = this.getSelectionModel.getSelectedItem

@@ -9,6 +9,8 @@ class SortingPane extends FlowPane:
   maxWidth = 200
 
   val categoryPane = new CategoryPane
+  categoryPane.comboBox += ("")
+  val systemPane = new SystemPane
 
   val readCheck = new CheckBox
   val favCheck = new CheckBox
@@ -26,7 +28,7 @@ class SortingPane extends FlowPane:
       textField.minWidth = 100
       textField.maxWidth = 100
     ,
-    new AttributePane("RPG"),
+    systemPane,
     new AttributePane("Read") { center = readCheck },
     new AttributePane("Favourite") { center = favCheck },
     new AttributePane("Tags") { center = tagArea }
