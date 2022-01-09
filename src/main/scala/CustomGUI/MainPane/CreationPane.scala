@@ -33,8 +33,10 @@ class CreationPane extends BorderPane:
   var driveSearch = false
   val systemPane = new SystemPane
   val tagArea = new TagArea
+
   val readCheck = new CheckBox
   val favCheck = new CheckBox
+  val toReadCheck = new CheckBox
 
   val pdfWindow = new ImageView { alignmentInParent = Pos.Center }
   var pdfDest = ""
@@ -64,7 +66,8 @@ class CreationPane extends BorderPane:
       systemPane,
       new AttributePane("Tags") { center = tagArea },
       new AttributePane("Read") { center = readCheck },
-      new AttributePane("Favourite") { center = favCheck }
+      new AttributePane("Favourite") { center = favCheck },
+      new AttributePane("ToRead") { center = toReadCheck }
     )
 
     prefWrapLength = 50
@@ -128,7 +131,8 @@ class CreationPane extends BorderPane:
                 categoryPane.headerValues._1,
                 categoryPane.headerValues._2,
                 categoryPane.headerValues._3
-              )
+              ),
+              toRead = toReadCheck.isSelected
             )
           )
           try {

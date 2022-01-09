@@ -1,3 +1,4 @@
+import scala.compiletime.ops.boolean
 case class PdfObject(
     name: String = "N/A Name",
     source: String = "N/A Source",
@@ -12,7 +13,8 @@ case class PdfObject(
     var category: Category = new Category,
     categoryInfo: List[String] = List("", "", ""),
     rpg: String = "System Neutral",
-    description: String = "N/A description"
+    description: String = "N/A description",
+    toRead: Boolean = false
 ):
 
   def categoryName: String = category.title

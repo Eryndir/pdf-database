@@ -22,6 +22,7 @@ class PdfAttributesPane(openButton: Button, updateButton: Button)
 
   val readCheck = new CheckBox
   val favCheck = new CheckBox
+  val toReadCheck = new CheckBox
 
   val attributePaneSeq = Seq(
     new AttributePane("Name"),
@@ -42,6 +43,7 @@ class PdfAttributesPane(openButton: Button, updateButton: Button)
       textField.maxWidth = 100
     ,
     new AttributePane("Extra Material:"),
+    new AttributePane("ToRead") { center = toReadCheck },
     new AttributePane("Tags") { center = tagArea }
   )
 
@@ -114,7 +116,8 @@ class PdfAttributesPane(openButton: Button, updateButton: Button)
             categoryPane.headerValues._1,
             categoryPane.headerValues._2,
             categoryPane.headerValues._3
-          )
+          ),
+          toRead = toReadCheck.isSelected
         )
 
       dbHandler.update(updatedPdf)

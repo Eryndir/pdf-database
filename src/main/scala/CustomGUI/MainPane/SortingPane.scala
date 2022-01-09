@@ -14,6 +14,8 @@ class SortingPane extends FlowPane:
 
   val readCheck = new CheckBox
   val favCheck = new CheckBox
+  val toReadCheck = new CheckBox
+
   val tagArea = new TagArea { maxWidth = 300 }
 
   val attributePaneSeq = Seq(
@@ -31,6 +33,7 @@ class SortingPane extends FlowPane:
     systemPane,
     new AttributePane("Read") { center = readCheck },
     new AttributePane("Favourite") { center = favCheck },
+    new AttributePane("ToRead") { center = favCheck },
     new AttributePane("Tags") { center = tagArea }
   )
 
